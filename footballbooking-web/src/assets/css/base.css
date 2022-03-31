@@ -1,0 +1,210 @@
+.block {
+    height: 300px;
+    width: 100%;
+    background-color: aquamarine;
+    margin-bottom: 14px;
+}
+
+.p-left-right {
+    /* max-width: 1190px; */
+    padding: 0 8%;
+}
+
+.p-0{
+    padding: 0;
+}
+
+.mf-30{
+    margin-left: 30px;
+}
+
+.pl-10 {
+	padding-left: 10px;
+}
+
+.block {
+    width: 100%;
+    height: 230px;
+    background-color: aqua;
+}
+
+.mb-30{
+    margin-bottom: 30px;
+}
+
+.b-b {
+	border-bottom: #d9d9d9 1px solid;
+	line-height: 30px;
+}
+
+.button-main {
+    background-color: rgb(49,118,58);
+    width: 100%;
+    color: white;
+    border-radius: 0 4px 4px 0;
+    height: 42px;
+}
+
+.button-main:hover {
+    background-color: rgb(66,156,78);
+}
+
+.button {
+	pointer-events: auto;
+	cursor: pointer;
+	background: #e7e7e7;
+	border: none;
+	padding: 1.5rem 3rem;
+	margin: 0;
+	font-family: inherit;
+	font-size: inherit;
+	position: relative;
+	display: inline-block;
+}
+
+a:focus,
+button:focus {
+	/* Provide a fallback style for browsers
+	 that don't support :focus-visible */
+	outline: none;
+}
+
+
+
+a:focus-visible,
+button:focus-visible {
+	/* Draw a very noticeable focus style for
+	 keyboard-focus on browsers that do support
+	 :focus-visible */
+	outline: 2px solid #443ffc;
+	outline-offset: 3px;
+}
+
+.button::before,
+.button::after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+
+
+.button--mimas {
+	text-transform: uppercase;
+	letter-spacing: 0.05rem;
+	font-weight: 700;
+	font-size: 0.85rem;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	color: #fff;
+	background: #e7e7e7;
+}
+
+.button--mimas span {
+	position: relative;
+	mix-blend-mode: difference;
+}
+
+.button--mimas::before {
+	content: '';
+	background: rgb(220,220,220);
+	width: 120%;
+	left: -10%;
+	transform: skew(30deg);
+	transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.button--mimas:hover::before {
+	transform: translate3d(100%,0,0);
+}
+
+.button--fenrir {
+	background: none;
+	padding: 0;
+	-webkit-clip-path: circle(50% at 50% 50%);
+	clip-path: circle(50% at 50% 50%);
+	width: 120px;
+	height: 120px;
+	font-family: aktiv-grotesk-extended, sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 0.85rem;
+}
+
+.progress {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	top: calc(50% - 40px);
+	left: calc(50% - 40px);
+	transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.button--fenrir:hover .progress {
+	transform: scale3d(1.2, 1.2, 1);
+}
+
+.progress__circle,
+.progress__path {
+	fill: none;
+	stroke: #f0f0f0;
+	stroke-width: 1px;
+}
+
+.button--fenrir:focus-visible .progress__circle {
+	fill: rgba(252,196,63,0.4);
+}
+
+.progress__path {
+	stroke: #a6a6a6;
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+	transition: stroke-dashoffset 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.button--skoll {
+	overflow: hidden;
+	border-radius: 50%;
+	color: #fff;
+	width: 50px;
+	height: 50px;
+	padding: 0;
+	font-weight: 500;
+}
+
+.button--skoll span {
+	display: block;
+	position: relative;
+}
+
+.button--skoll > span {
+	overflow: hidden;
+	mix-blend-mode: difference;
+}
+
+.button--skoll:hover > span > span {
+	animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
+}
+
+.button--skoll::before {
+	content: '';
+	background: #fff;
+	border: 1px solid #000;
+	width: 100%;
+	height: 0;
+	padding-bottom: 100%;
+	border-radius: 50%;
+	transform: translate3d(0,0,0);
+	transition: transform 0.3s;
+	transition-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.button--skoll:hover::before {
+	transform: translate3d(0,100%,0);
+}
+
+.button--fenrir:hover .progress__path {
+	stroke-dashoffset: 0;
+}
