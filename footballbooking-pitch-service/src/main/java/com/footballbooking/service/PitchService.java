@@ -7,18 +7,28 @@ import org.springframework.stereotype.Service;
 
 import com.footballbooking.dao.PitchDao;
 import com.footballbooking.entity.Pitch;
+import com.footballbooking.util.FirebaseUtil;
 
 @Service
 public class PitchService {
 
 	@Autowired
 	private PitchDao pitchDao;
+	
+	@Autowired
+	private FirebaseUtil firebaseUtil;
 
 	public List<Pitch> getAll() {
-		return pitchDao.getAll();
+		List<Pitch> pitchs = pitchDao.getAll();
+		for (Pitch pitch : pitchs) {
+			pitch.setCoverAvatarLink(firebaseUtil.getFileUrl(pitch.getCoverAvatar()));
+		}
+		return pitchs;
 	}
 
 	public Pitch getById(Integer pitchId) {
-		return pitchDao.getById(pitchId);
+		Pitch pitch = pitchDao.getById(pitchId);
+		pitch.setCoverAvatarLink(firebaseUtil.getFileUrl(pitch.getCoverAvatar()));
+		return pitch;
 	}
 }

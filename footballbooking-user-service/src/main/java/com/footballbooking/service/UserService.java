@@ -25,4 +25,8 @@ public class UserService {
 	public User getById (Integer userId) {
 		return userDao.getById(userId);
 	}
+	
+	public User getByPhoneAndPassword (String phone, String password) {
+		return userDao.getByPhoneAndPassword(phone, password);
+	}
 }

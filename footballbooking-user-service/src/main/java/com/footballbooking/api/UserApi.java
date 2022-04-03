@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,6 +64,22 @@ public class UserApi {
 		}
 		
 		return result;
+	}
+	
+	@PostMapping("/checkLogin")
+	public ResponseEntity<?> checkLogin (@RequestParam(name = "phone") String phone,
+			@RequestParam(name = "password") String password){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			User user = userService.getByPhoneAndPassword(phone, password);
+			JsonNode authenData = userResponse.getAuthenInfo(user);
+			result = ResponseUtil.createResponse(true, authenData, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		
+		return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 	}
 	
 }

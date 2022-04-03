@@ -23,5 +23,12 @@ public class UserDao extends EntityDao<User> {
 		query.setParameter("phone", phone);
 		return query.uniqueResult();
 	}
-
+	
+	public User getByPhoneAndPassword (String phone, String password) {
+		String sql =  "SELECT * FROM user WHERE phone = :phone AND password = :password";
+		NativeQuery<User> query = openSession().createNativeQuery(sql, User.class);
+		query.setParameter("phone", phone)
+			 .setParameter("password", password);
+		return query.uniqueResult();
+	}
 }

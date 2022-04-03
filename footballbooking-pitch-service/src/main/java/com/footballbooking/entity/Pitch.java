@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,6 +39,9 @@ public class Pitch implements Serializable {
 
 	@Column(name = "owner_id")
 	private Integer ownerId;
+
+	@Transient
+	private String coverAvatarLink;
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pitch")
@@ -117,6 +121,14 @@ public class Pitch implements Serializable {
 
 	public void setMiniPitchs(List<MiniPitch> miniPitchs) {
 		this.miniPitchs = miniPitchs;
+	}
+
+	public String getCoverAvatarLink() {
+		return coverAvatarLink;
+	}
+
+	public void setCoverAvatarLink(String coverAvatarLink) {
+		this.coverAvatarLink = coverAvatarLink;
 	}
 
 }
