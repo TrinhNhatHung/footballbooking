@@ -39,4 +39,8 @@ public class BookingService {
 	public void insert (Booking booking) {
 		bookingDao.insert(booking);
 	}
+	
+	public List<Booking> getWaitingBooking (List<Integer> miniPitchIds){
+		return bookingDao.getWaitingBooking(miniPitchIds);
+	}
 }

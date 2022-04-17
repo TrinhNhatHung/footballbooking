@@ -38,6 +38,9 @@ public class Booking {
 	@Column(name = "user_id")
 	private Integer userId;
 
+	@Column(name = "message")
+	private String message;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "booking", cascade = CascadeType.ALL)
 	private List<BookingStatus> bookingStatuses;
 
@@ -99,6 +102,14 @@ public class Booking {
 
 	public void setBookingStatuses(List<BookingStatus> bookingStatuses) {
 		this.bookingStatuses = bookingStatuses;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

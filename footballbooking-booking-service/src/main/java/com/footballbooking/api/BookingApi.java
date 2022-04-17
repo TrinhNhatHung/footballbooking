@@ -2,8 +2,10 @@ package com.footballbooking.api;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.footballbooking.constant.Constant;
 import com.footballbooking.constant.MessageConst;
 import com.footballbooking.entity.Booking;
@@ -117,6 +121,28 @@ public class BookingApi {
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = ResponseUtil.createResponse(false, null, MessageConst.BOOKING_ERROR);
+		}
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getRequestBookingList")
+	public ResponseEntity<?> getRequestBookingList (){
+		String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+			formData.add("userId", userId);
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
+			ArrayNode miniPitchIdData = (ArrayNode) restTemplateUtil.postObjectNode(env.getProperty("PITCH_SERVICE_GET_MINIPITCH_BY_USER_ID"), request);
+			List<Integer> miniPitchId = new ArrayList<>();
+			miniPitchIdData.forEach(jsonNode -> miniPitchId.add(jsonNode.asInt()));
+			List<Booking> waitingBooking = bookingService.getWaitingBooking(miniPitchId);
+			ArrayNode waitingBookingData = bookingResponse.waitingBooking(waitingBooking);
+			result = ResponseUtil.createResponse(true, waitingBookingData, "");
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
 		}
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}

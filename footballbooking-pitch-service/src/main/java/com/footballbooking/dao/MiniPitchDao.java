@@ -16,4 +16,8 @@ public class MiniPitchDao extends EntityDao<MiniPitch>{
 						.setParameterList("miniPitchIdList", miniPitchIds);
 		return query.getResultList();
 	}
+	
+	public MiniPitch getById (Integer miniPitchId) {
+		return super.getById(MiniPitch.class, miniPitchId);
+	}
 }

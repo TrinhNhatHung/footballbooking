@@ -14,24 +14,25 @@ import com.footballbooking.util.JwtUtil;
 
 @Component
 public class UserResponse {
-	
+
 	@Autowired
 	private ObjectMapper mapper;
-	
+
 	@Autowired
 	private JwtUtil jwtUtil;
-	
-	public JsonNode getUserId (User user) {
-		
+
+	public JsonNode getUserId(User user) {
+
 		return mapper.convertValue(user, JsonNode.class);
 	}
-	
-	public JsonNode getAuthenInfo (User user) {
+
+	public JsonNode getAuthenInfo(User user) {
 		ObjectNode node = mapper.createObjectNode();
 		if (user != null) {
 			Map<String, Object> jwtClaim = new HashMap<>();
 			jwtClaim.put("phone", user.getPhone());
 			jwtClaim.put("password", user.getPassword());
+			jwtClaim.put("userId", user.getUserId());
 			String token = jwtUtil.createToken(jwtClaim);
 			node.set("token", mapper.convertValue(token, JsonNode.class));
 			node.set("isAuthen", mapper.convertValue(true, JsonNode.class));
@@ -39,7 +40,7 @@ public class UserResponse {
 		} else {
 			node.set("isAuthen", mapper.convertValue(false, JsonNode.class));
 		}
-		
+
 		return node;
 	}
 }

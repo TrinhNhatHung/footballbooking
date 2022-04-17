@@ -44,9 +44,10 @@ public class Filter extends OncePerRequestFilter {
     	String phone = null;
         String password = null;
         String role = null;
-        
+        Integer userId = null;
         if (token != null){
             try {
+            	userId = jwtUtil.extractAllClaims(token).get("userId", Integer.class);
                 phone = jwtUtil.extractAllClaims(token).get("phone", String.class);
                 password = jwtUtil.extractAllClaims(token).get("password", String.class);
             } catch (Exception e){
@@ -54,7 +55,7 @@ public class Filter extends OncePerRequestFilter {
             }
         }
         
-        if (phone != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null){
         	HttpHeaders headers = new HttpHeaders();
     		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
     		formData.add("phone", phone);
@@ -65,9 +66,9 @@ public class Filter extends OncePerRequestFilter {
             role = checkLoginData.findValue("role").asText();
             if (isAuthen){
             	
-            	User userDetail = new User(phone, password, Arrays.asList(new SimpleGrantedAuthority(role)));
+            	User userDetail = new User("" + userId, password, Arrays.asList(new SimpleGrantedAuthority(role)));
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                	userDetail, null, userDetail.getAuthorities()
+                	userDetail.getUsername(), userDetail.getPassword(), userDetail.getAuthorities()
                 );
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
