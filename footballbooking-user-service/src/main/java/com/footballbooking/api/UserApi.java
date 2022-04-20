@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.footballbooking.constant.MessageConst;
+import com.footballbooking.constant.RoleConst;
+import com.footballbooking.entity.Role;
 import com.footballbooking.entity.User;
 import com.footballbooking.response.UserResponse;
+import com.footballbooking.service.RoleService;
 import com.footballbooking.service.UserService;
 import com.footballbooking.util.ResponseUtil;
 
@@ -31,6 +34,9 @@ public class UserApi {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private RoleService roleService;
+	
 	@PostMapping("/signUp")
 	public ResponseEntity<?> signUp(@ModelAttribute User user) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -41,7 +47,9 @@ public class UserApi {
 			return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 		}
 		try {
+			Role role = roleService.getByRoleName(RoleConst.ROLE_CUSTOMER);
 			user.setStatus(true);
+			user.setRole(role);
 			userService.insert(user);
 			result = ResponseUtil.createResponse(true, user, MessageConst.INSERT_USER_SUCCESS);
 		} catch (Exception e) {

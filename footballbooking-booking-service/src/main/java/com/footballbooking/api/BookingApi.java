@@ -89,9 +89,10 @@ public class BookingApi {
 					@RequestParam(name = "hourStart") String hourStartStr,
 					@RequestParam(name = "bookingDate") String bookingDateStr,
 					@RequestParam(name = "miniPitchId") Integer miniPitchId,
-					@RequestParam(name = "userId") Integer userId
+					@RequestParam(name = "message", required = false) String message
 					) {
-		
+		String userIdStr = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Integer userId = Integer.parseInt(userIdStr);
 		LocalTime hourStart = DateUtil.convertStringToLocalTime(hourStartStr, "HH:mm");
 		LocalDate bookingDate = DateUtil.convertStringToLocalDate(bookingDateStr, "yyyy/MM/dd");
 		
@@ -101,6 +102,9 @@ public class BookingApi {
 		booking.setBookingDate(bookingDate);
 		booking.setMiniPitchId(miniPitchId);
 		booking.setUserId(userId);
+		if (message != null) {
+			booking.setMessage(message);
+		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			boolean checkBookedMiniPitch = bookingService.checkBookedMiniPitchByBookingDateAndTime(miniPitchId, bookingDate, hourStart);
