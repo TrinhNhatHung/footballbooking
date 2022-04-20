@@ -1,0 +1,8 @@
+.info-pitch-detail {
+    display: flex;
+}
+
+.btn-find {
+    float: left;
+    background-color: #4CAF50;
+}

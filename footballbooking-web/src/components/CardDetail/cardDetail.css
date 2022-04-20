@@ -1,0 +1,142 @@
+.card-detail {
+    width: 100%;
+    /* min-height: 750px; */
+    box-shadow: 1px 2px 15px 5px rgb(0 0 0 / 26%);
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.card-image-link {
+    height: 230px;
+    width: 100%;
+}
+
+.card-information .name {
+    font-size: 22px;
+    color: black;
+    font-weight: 600;
+}
+
+.address {
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.category {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.price-time {
+    font-weight: 300;
+    font-size: 16px;
+    flex-direction: column;
+}
+
+.phone-number-title {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.phone-number-value {
+    font-weight: 500;
+    font-size: 16px;
+    color: rgb(39, 193, 103);
+    margin-left: 20px;
+}
+
+.card-info-item {
+    border-bottom: #d9d9d9 1px solid;
+    line-height: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.card-information {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-time {
+    display: flex;
+    justify-content: space-between;
+}
+
+.price-time .price {
+    color: red;
+    font-weight: 600;
+}
+
+.button--mimas span {
+    font-size: 10px;
+}
+
+.button-detail {
+    background-color: #4CAF50;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+    padding: 5px 15px;
+}
+
+.button1:hover {
+    background-color: white;
+    color: black;
+}
+
+.time-detail {
+    line-height: 52px;
+}
+
+.info-pitch-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-pitch-detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.time-order {
+    display: flex;
+    margin-left: 100px;
+    flex-wrap: wrap;
+}
+
+.time-order-free {
+    height: 30px;
+    width: 90px;
+    border: 1px solid;
+    border-radius: 4px;
+    margin-left: 15px;
+    margin-right: 2px;
+}
+
+.time-order-free:hover {
+    background-color: #d9d9d9;
+}
+
+
+.hidden-time-order {
+    display: none;
+}
+
+.view-search-detail {
+    width: 100%;
+}

@@ -1,4 +1,7 @@
+import axios from "axios";
 import axiosClient from "./axiosClient";
+import * as Config from '../services/Config';
+
 
 const pitchApi = {
     getAll: (params) => {
@@ -7,9 +10,19 @@ const pitchApi = {
     },
 
     get: (id) => {
-        const url = `/pitchs/${id}`;
+        const url = `pitchservice/pitch/${id}`;
         return axiosClient.get(url);
     },
+
+    getFreeTimeSlot: (params) => {
+        const url = 'bookingservice/getFreeTimeSlot';
+        return axiosClient.get(url, { params: params });
+    },
+
+    getMiniPitchById: (id) => {
+        const url = 'pitchservice/miniPitchByIdList';
+        return axiosClient.get(url, { params: id });
+    }
 }
 
 export default pitchApi; 
