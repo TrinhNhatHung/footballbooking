@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,10 +33,20 @@ public class PitchApi {
 	private PitchService pitchService;
 	
 	@GetMapping("/pitchs")
-	public ResponseEntity<?> pitchs (){
+	public ResponseEntity<?> pitchs (@RequestParam(name = "page", required = false) Integer page,
+						@RequestParam(name = "limit", required = false) Integer limit,
+						@RequestParam(name = "searhByNameOrAddress", required = false) String searchByNameOrAddress,
+						@RequestParam(name = "pitchTypeId", required = false) Integer pitchTypeId,
+						@RequestParam(name = "costMax", required = false) Integer costMax,
+						@RequestParam(name = "costMin", required = false) Integer costMin){
+		System.out.println(page);
+		System.out.println(limit);
+		System.out.println(searchByNameOrAddress);
+		System.out.println(pitchTypeId);
+		System.out.println(costMax);
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			List<Pitch> pitchs = pitchService.getAll();
+			List<Pitch> pitchs = pitchService.getByCondition(page, limit, searchByNameOrAddress, pitchTypeId, costMin, costMax);
 			ArrayNode pitchsData = pitchResponse.responsePitchList(pitchs);
 			result = ResponseUtil.createResponse(true, pitchsData, MessageConst.GET_PITCHS_SUCCESS);
 		} catch (Exception e) {
