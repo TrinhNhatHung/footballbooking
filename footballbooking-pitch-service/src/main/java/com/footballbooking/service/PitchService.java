@@ -17,6 +17,10 @@ public class PitchService {
 	public List<Pitch> getAll() {
 		return pitchDao.getAll();
 	}
+	
+	public List<Pitch> getByCondition (Integer page, Integer limit, String searhByNameOrAddress, Integer pitchTypeId, Integer costMin, Integer costMax){
+		return pitchDao.getByCondition(page, limit, searhByNameOrAddress, pitchTypeId, costMin, costMax);
+	}
 
 	public Pitch getById(Integer pitchId) {
 		return pitchDao.getById(pitchId);
