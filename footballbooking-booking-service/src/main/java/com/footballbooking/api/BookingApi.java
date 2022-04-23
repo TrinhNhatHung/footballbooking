@@ -150,4 +150,9 @@ public class BookingApi {
 		}
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
+	
+	@PostMapping("/acceptBookingRequest")
+	public ResponseEntity<?> acceptBookingRequest (){
+		return null;
+	}
 }
