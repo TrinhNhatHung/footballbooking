@@ -19,6 +19,10 @@ public class BookingService {
 	@Autowired
 	private BookingDao bookingDao;
 	
+	public Booking getById (Integer bookingId) {
+		return bookingDao.getById(bookingId);
+	}
+	
 	public List<Integer> getNotBookedMiniPitch (List<Integer> miniPitchIds, LocalDate bookingDate, LocalTime timeSlot) {
 		List<Integer> miniPitchIdsClone = new ArrayList<>();
 		for (Integer id : miniPitchIds) {

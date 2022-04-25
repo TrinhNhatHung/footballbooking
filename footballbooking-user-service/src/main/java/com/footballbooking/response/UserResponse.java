@@ -37,6 +37,10 @@ public class UserResponse {
 			node.set("token", mapper.convertValue(token, JsonNode.class));
 			node.set("isAuthen", mapper.convertValue(true, JsonNode.class));
 			node.set("role", mapper.convertValue(user.getRole().getRoleName(), JsonNode.class));
+			node.set("userId", mapper.convertValue(user.getUserId(), JsonNode.class));
+			node.set("fullName", mapper.convertValue(user.getFullname(), JsonNode.class));
+			node.set("phone", mapper.convertValue(user.getPhone(), JsonNode.class));
+			node.set("email", mapper.convertValue(user.getEmail(), JsonNode.class));
 		} else {
 			node.set("isAuthen", mapper.convertValue(false, JsonNode.class));
 		}

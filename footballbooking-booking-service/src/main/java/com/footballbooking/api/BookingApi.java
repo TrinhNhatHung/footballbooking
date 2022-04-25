@@ -28,12 +28,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.footballbooking.constant.Constant;
 import com.footballbooking.constant.MessageConst;
+import com.footballbooking.constant.StatusConst;
 import com.footballbooking.entity.Booking;
 import com.footballbooking.entity.BookingStatus;
 import com.footballbooking.entity.BookingStatus.Id;
 import com.footballbooking.entity.Status;
 import com.footballbooking.response.BookingResponse;
 import com.footballbooking.service.BookingService;
+import com.footballbooking.service.BookingStatusService;
 import com.footballbooking.service.StatusService;
 import com.footballbooking.util.DateUtil;
 import com.footballbooking.util.ResponseUtil;
@@ -54,6 +56,9 @@ public class BookingApi {
 	
 	@Autowired
 	private StatusService statusService;
+	
+	@Autowired
+	private BookingStatusService bookingStatusService;
 
 	@Autowired
 	private Environment env;
@@ -113,7 +118,7 @@ public class BookingApi {
 				return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 			}
 			
-			Status status = statusService.getByStatusName("Chờ xác nhận");
+			Status status = statusService.getByStatusName(StatusConst.STATUS_WAITING_APPROVAL);
 			BookingStatus bookingStatus = new BookingStatus();
 			Id id = new Id(booking.getBookingId(), status.getStatusId());
 			bookingStatus.setBookingStatusId(id);
@@ -152,7 +157,42 @@ public class BookingApi {
 	}
 	
 	@PostMapping("/acceptBookingRequest")
-	public ResponseEntity<?> acceptBookingRequest (){
-		return null;
+	public ResponseEntity<?> acceptBookingRequest (@RequestParam(name = "bookingId") Integer bookingId){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Booking booking = bookingService.getById(bookingId);
+			Status status= statusService.getByStatusName(StatusConst.STATUS_APPROVED);
+			BookingStatus bookingStatus = new BookingStatus();
+			bookingStatus.setBooking(booking);
+			bookingStatus.setStatus(status);
+			Id id  = new Id(booking.getBookingId(), status.getStatusId());
+			bookingStatus.setBookingStatusId(id);
+			bookingStatusService.insert(bookingStatus);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/rejectBookingRequest")
+	public ResponseEntity<?> rejectBookingRequest (@RequestParam(name = "bookingId") Integer bookingId){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Booking booking = bookingService.getById(bookingId);
+			Status status= statusService.getByStatusName(StatusConst.STATUS_REJECTED);
+			BookingStatus bookingStatus = new BookingStatus();
+			bookingStatus.setBooking(booking);
+			bookingStatus.setStatus(status);
+			Id id  = new Id(booking.getBookingId(), status.getStatusId());
+			bookingStatus.setBookingStatusId(id);
+			bookingStatusService.insert(bookingStatus);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 }

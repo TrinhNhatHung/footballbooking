@@ -39,32 +39,37 @@ public class BookingResponse {
 	public JsonNode getFreeTimeSlot (JsonNode pitchDetailData, LocalDate bookingDate) {
 		String timeStartStr = pitchDetailData.path("timeStart").asText();
 		String timeEndStr = pitchDetailData.path("timeEnd").asText();
+
 		ArrayNode miniPitchsArrNode = (ArrayNode) pitchDetailData.path("miniPitchs");
 		List<Integer> miniPitchIds = new ArrayList<>();
 		for (JsonNode miniPitchNode: miniPitchsArrNode) { 
 		  Integer miniPitchId = miniPitchNode.asInt();
 		  miniPitchIds.add(miniPitchId);
 		}
-		
-		LocalTime timeStart = DateUtil.convertStringToLocalTime(timeStartStr, "HH:mm:ss");
-		LocalTime timeEnd = DateUtil.convertStringToLocalTime(timeEndStr, "HH:mm:ss");
-		List<LocalTime> timeSlots = new ArrayList<>();
-		int count = 0;
-		while (timeStart.plusHours(count).isBefore(timeEnd)) {
-			timeSlots.add(timeStart.plusHours(count));
-			count++;
-		}
-		
 		ArrayNode result = mapper.createArrayNode();
-		
-		for (LocalTime timeSlot :  timeSlots) {
-			ObjectNode node = mapper.createObjectNode();
-			List<Integer> notBookedMiniPitchId  = bookingService.getNotBookedMiniPitch(miniPitchIds, bookingDate, timeSlot);
-			node.set("timeStart", mapper.convertValue(DateUtil.convertLocalTimeToString(timeSlot, "HH:mm"), JsonNode.class));
-			node.set("timeEnd", mapper.convertValue(DateUtil.convertLocalTimeToString(timeSlot.plusHours(Constant.DURATION_PER_MATCH), "HH:mm"), JsonNode.class));
-			node.set("miniPitchId", mapper.convertValue(notBookedMiniPitchId, ArrayNode.class));
-			node.set("hasPitch", mapper.convertValue(notBookedMiniPitchId.size() > 0, JsonNode.class));
-			result.add(node);
+		try {
+			LocalTime timeStart = DateUtil.convertStringToLocalTime(timeStartStr, "HH:mm:ss");
+			LocalTime timeEnd = DateUtil.convertStringToLocalTime(timeEndStr, "HH:mm:ss");
+			List<LocalTime> timeSlots = new ArrayList<>();
+			int count = 0;
+			while (timeStart.plusHours(count).isBefore(timeEnd)) {
+				timeSlots.add(timeStart.plusHours(count));
+				count++;
+			}
+			
+			
+			
+			for (LocalTime timeSlot :  timeSlots) {
+				ObjectNode node = mapper.createObjectNode();
+				List<Integer> notBookedMiniPitchId  = bookingService.getNotBookedMiniPitch(miniPitchIds, bookingDate, timeSlot);
+				node.set("timeStart", mapper.convertValue(DateUtil.convertLocalTimeToString(timeSlot, "HH:mm"), JsonNode.class));
+				node.set("timeEnd", mapper.convertValue(DateUtil.convertLocalTimeToString(timeSlot.plusHours(Constant.DURATION_PER_MATCH), "HH:mm"), JsonNode.class));
+				node.set("miniPitchId", mapper.convertValue(notBookedMiniPitchId, ArrayNode.class));
+				node.set("hasPitch", mapper.convertValue(notBookedMiniPitchId.size() > 0, JsonNode.class));
+				result.add(node);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}

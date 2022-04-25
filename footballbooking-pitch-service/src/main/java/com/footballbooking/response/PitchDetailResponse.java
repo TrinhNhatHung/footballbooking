@@ -1,6 +1,7 @@
 package com.footballbooking.response;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,15 +25,19 @@ public class PitchDetailResponse {
 		ObjectNode pitchDetailData = mapper.createObjectNode();
 		Optional<LocalTime> timeStart = pitchDetails.stream().map(p-> p.getTimeStart()).min((t1,t2) -> t1.isBefore(t2) ? -1 : 1);
 		Optional<LocalTime> timeEnd = pitchDetails.stream().map(p-> p.getTimeEnd()).max((t1,t2) -> t1.isBefore(t2) ? -1 : 1);
-		pitchDetailData.set("timeStart", mapper.convertValue(timeStart.get(), JsonNode.class));
-		pitchDetailData.set("timeEnd", mapper.convertValue(timeEnd.get(), JsonNode.class));
-		
-		int pitchTypeId = pitchDetails.get(0).getPitchType().getPitchTypeId();
+		pitchDetailData.set("timeStart", mapper.convertValue(timeStart.orElse(null), JsonNode.class));
+		pitchDetailData.set("timeEnd", mapper.convertValue(timeEnd.orElse(null), JsonNode.class));
+		try {
+			int pitchTypeId = pitchDetails.get(0).getPitchType().getPitchTypeId();
 
-		int[] miniPitchIds = pitchDetails.get(0).getPitch().getMiniPitchs().stream()
-								.filter(miniPitch -> miniPitch.getPitchType().getPitchTypeId().equals(pitchTypeId))
-								.mapToInt(MiniPitch::getMiniPitchId).toArray();
-		pitchDetailData.set("miniPitchs", mapper.convertValue(miniPitchIds, ArrayNode.class));
+			int[] miniPitchIds = pitchDetails.get(0).getPitch().getMiniPitchs().stream()
+									.filter(miniPitch -> miniPitch.getPitchType().getPitchTypeId().equals(pitchTypeId))
+									.mapToInt(MiniPitch::getMiniPitchId).toArray();
+			pitchDetailData.set("miniPitchs", mapper.convertValue(miniPitchIds, ArrayNode.class));
+		} catch (Exception e) {
+			pitchDetailData.set("miniPitchs", mapper.convertValue(new ArrayList<Integer>(), ArrayNode.class));
+		}
+		
 		return pitchDetailData;
 	}
 	

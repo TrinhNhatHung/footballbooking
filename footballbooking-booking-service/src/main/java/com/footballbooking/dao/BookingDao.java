@@ -15,6 +15,10 @@ import com.footballbooking.util.DateUtil;
 @Repository
 public class BookingDao extends EntityDao<Booking>{
 	
+	public Booking getById (Integer bookingId) {
+		return super.getById(Booking.class, bookingId);
+	}
+	
 	public List<Booking> getBookingByBookingDataAndHour (LocalDate bookingDate, LocalTime timeSlot) {
 		String sql = "SELECT * FROM booking WHERE booking_date = :bookingDate AND hour_start <= CAST(:timeSlot AS time) AND hour_end > CAST(:timeSlot AS time)";
 		NativeQuery<Booking> query = openSession().createNativeQuery(sql, Booking.class)

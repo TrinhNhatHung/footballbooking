@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers("/getRequestBookingList").hasRole("PITCHOWNER")
+				.antMatchers("/getRequestBookingList", "/acceptBookingRequest").hasRole("PITCHOWNER")
 				.antMatchers("/book").hasRole("CUSTOMER")
 				.antMatchers("/**").permitAll()
 				.anyRequest().authenticated();
