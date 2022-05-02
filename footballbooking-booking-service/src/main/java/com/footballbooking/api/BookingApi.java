@@ -195,4 +195,21 @@ public class BookingApi {
 		}
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/getMyBooking")
+	public ResponseEntity <?> getMyBooking (){
+		String userIdStr = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Integer userId = Integer.parseInt(userIdStr);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			List<Booking> bookings = bookingService.getByUserId(userId);
+			ArrayNode bookingData = bookingResponse.getMyBooking(bookings);
+			result = ResponseUtil.createResponse(true, bookingData, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+	}
 }

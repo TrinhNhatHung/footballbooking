@@ -55,4 +55,11 @@ public class BookingDao extends EntityDao<Booking>{
 		return result;
 	}
 	
+	public List<Booking> getByUserId (Integer userId) {
+		String sql = "SELECT * FROM booking WHERE user_id = :userId";
+		NativeQuery<Booking> query = openSession().createNativeQuery(sql, Booking.class)
+					.setParameter("userId", userId);
+		return query.getResultList();
+	}
+	
 }

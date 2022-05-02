@@ -47,4 +47,8 @@ public class BookingService {
 	public List<Booking> getWaitingBooking (List<Integer> miniPitchIds){
 		return bookingDao.getWaitingBooking(miniPitchIds);
 	}
+	
+	public List<Booking> getByUserId (Integer userId) {
+		return bookingDao.getByUserId(userId);
+	}
 }

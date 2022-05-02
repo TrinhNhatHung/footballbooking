@@ -7,7 +7,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -17,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.footballbooking.constant.Constant;
 import com.footballbooking.entity.Booking;
+import com.footballbooking.entity.BookingStatus;
 import com.footballbooking.service.BookingService;
 import com.footballbooking.util.DateUtil;
 import com.footballbooking.util.RestTemplateUtil;
@@ -92,6 +97,38 @@ public class BookingResponse {
 			JsonNode miniPitchData = restTemplateUtil.getObjectNode(pitchServiceGetMiniPitchInfoUrl, null);
 			waitingBookingNode.set("miniPitch", miniPitchData);
 			result.add(waitingBookingNode);
+		}
+		return result;
+	}
+	
+	public ArrayNode getMyBooking (List<Booking> bookings) throws JsonMappingException, JsonProcessingException {
+		ArrayNode result = mapper.createArrayNode();
+		for (Booking booking : bookings) {
+			List<BookingStatus> bookingStatuses = booking.getBookingStatuses();
+			for (BookingStatus bookingStatus : bookingStatuses) {
+				ObjectNode bookingNode = mapper.createObjectNode();
+				String bookingDateStr = DateUtil.convertLocalDateToString(booking.getBookingDate(), "dd/MM/yyyy");
+				String hourStartStr = DateUtil.convertLocalTimeToString(booking.getHourStart(), "HH:mm");
+				bookingNode.set("time", mapper.convertValue(bookingDateStr + " " + hourStartStr, JsonNode.class));
+				bookingNode.set("status", mapper.convertValue(bookingStatus.getStatus().getStatusName(), JsonNode.class));
+				String miniPitchFullInfoUrl = env.getProperty("PITCH_SERVICE_GET_MINIPITCH_FULL_INFO");
+				miniPitchFullInfoUrl+= booking.getMiniPitchId();
+				HttpHeaders headers = new HttpHeaders();
+	    		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+	    		formData.add("bookingDate", DateUtil.convertLocalDateToString(booking.getBookingDate(), "yyyy/MM/dd"));
+	    		formData.add("hourStart", DateUtil.convertLocalTimeToString(booking.getHourStart(), "HH:mm"));
+	    		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
+				JsonNode miniPitchData = restTemplateUtil.postObjectNode(miniPitchFullInfoUrl, request);
+				String miniPitchName = miniPitchData.path("miniPitchName").asText();
+				String pitchName = miniPitchData.path("pitchName").asText();
+				String pitchTypeName = miniPitchData.path("pitchTypeName").asText();
+				int cost = miniPitchData.path("cost").asInt();
+				bookingNode.set("pitchName", mapper.convertValue(pitchName + " " + miniPitchName, JsonNode.class));
+				bookingNode.set("pitchTypeName", mapper.convertValue(pitchTypeName, JsonNode.class));
+				bookingNode.set("cost", mapper.convertValue(cost, JsonNode.class));
+				result.add(bookingNode);
+			}
+			
 		}
 		return result;
 	}
