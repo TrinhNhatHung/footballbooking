@@ -24,11 +24,19 @@ function Home(props) {
     const { onPitchDetail } = props
 
     const [pitchs, setPitchs] = useState([]);
-    const [filter, setFilter] = useState({});
+    const [filter, setFilter] = useState({
+        page: 1,
+        limit: 3
+    });
 
     function handleFilterSubmit(formValues) {
-        setFilter(formValues)
-        console.log("App: " + formValues.searchTerm)
+        const filterNew = filter
+        const searhByNameOrAddress = formValues.searchTerm
+        setFilter({
+            ...filterNew,
+            page: 1,
+            searhByNameOrAddress,
+        })
     }
 
     function handlePitchClick(pitch) {
@@ -39,16 +47,59 @@ function Home(props) {
         console.log(pitch.pitchId + " : ")
     }
 
+    function handleClickPrice(costMin, costMax) {
+        console.log(costMin + " : " + costMax)
+        const filterNew = filter
+        setFilter({
+            ...filterNew,
+            costMin,
+            costMax
+        })
+    }
+
+    function handleClickPitch(pitchTypeId) {
+        const filterNew = filter
+        setFilter({
+            ...filterNew,
+            pitchTypeId
+        })
+    }
+
+    function handleClickPagination(type) {
+        const filterNew = filter
+        let page = filter.page
+        console.log("LE: " + pitchs.length)
+        if (type === 'next') {
+            console.log("aaaaa")
+            console.log(pitchs.length)
+            console.log(filter.limit)
+            console.log("aaaaa")
+            if (pitchs.length === filter.limit) {
+                page = page + 1
+                console.log("aaaaannn")
+            }
+        } else {
+            if (filter.page !== 1) {
+                page = filter.page - 1
+            }
+        }
+        console.log(page)
+        setFilter({
+            ...filterNew,
+            page
+        })
+    }
+
     useEffect(() => {
         const fetchPitchsList = async () => {
-            const response = await pitchApi.getAll();
+            const response = await pitchApi.getAll(filter);
             setPitchs(response.data)
         }
         fetchPitchsList();
     }, [filter])
     return (
         <div className='main-container'>
-            <Sidebar />
+            <Sidebar onClickPitchType={handleClickPitch} onClickPrice={handleClickPrice} />
             < div className="container mf-30 p-0" >
                 <Search onFilterSubmit={handleFilterSubmit} />
                 {pitchs.map(p => (
@@ -58,7 +109,7 @@ function Home(props) {
                     <Route path='/' element={<Home filter={filter} />}></Route>
                     <Route path='/pitchdetail' element={<PitchDetail />}></Route>
                 </Routes> */}
-                <Pagination />
+                <Pagination onClickPagination={handleClickPagination} />
             </div>
         </div>
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import axiosClient from "./axiosClient";
-import * as Config from '../services/Config';
+import axiosClientPost from "./axiosClientPost";
+import queryString from 'query-string';
 
 
 const pitchApi = {
@@ -16,12 +17,40 @@ const pitchApi = {
 
     getFreeTimeSlot: (params) => {
         const url = 'bookingservice/getFreeTimeSlot';
+        console.log("AHAHAHAL : ")
+        console.log(params)
         return axiosClient.get(url, { params: params });
     },
 
     getMiniPitchById: (id) => {
         const url = 'pitchservice/miniPitchByIdList';
         return axiosClient.get(url, { params: id });
+    },
+
+    booking: (params) => {
+        var data = new FormData();
+        data.append("bookingDate", params.bookingDate);
+        data.append("miniPitchId", params.miniPitchId);
+        data.append("hourStart", params.hourStart);
+        var config = {
+            url: "/bookingservice/book",
+            method: "POST",
+            data,
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                ...data.getHeaders,
+            },
+        };
+
+        return axiosClientPost(config)
+        // .then((response) => {
+        //     console.log("aaa")
+        //     console.log(response)t
+        //     return response;
+        // })
+        // .catch((error) => {
+        //     return "as";
+        // });
     }
 }
 

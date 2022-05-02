@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './cardDetail.css'
 import '../../assets/css/base.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactDatePicker from '../DayPicker/ReactDayPicker';
 import pitchApi from '../../api/pitchApi';
 
@@ -25,6 +25,12 @@ function CardDetail(props) {
     const [pitchName, setPitchName] = useState('');
     const [miniPitchId, setMiniPitchId] = useState([]);
     const [miniPitch, setMiniPitch] = useState([]);
+    const [booking, setBooking] = useState({
+
+    })
+    const navigate = useNavigate();
+
+
 
 
     function handleFindPitchByDate(d) {
@@ -66,6 +72,8 @@ function CardDetail(props) {
         const fetchFreeTimeSlot = async () => {
             if (miniPitchId.length > 0) {
                 const resp = await pitchApi.getMiniPitchById({ 'miniPitchId': miniPitchId });
+                console.log("AAAAAAAAAAAAAA")
+                console.log(resp.data)
                 setMiniPitch(resp.data)
             }
         }
@@ -93,12 +101,61 @@ function CardDetail(props) {
         handleFreeTimeSlot(pitchId, idType, date)
         setPitchName(pitchName)
         setMiniPitchId(miniPitchId)
+        const bookingCur = booking
+        setBooking({
+            ...bookingCur,
+            "bookingDate": date
+        })
     }
 
     function handleClickTime(time, miniPitchId) {
-        console.log("Time: " + time)
+        console.log("Time: " + miniPitchId + ":::" + miniPitchId[0])
         setOrderTime(time)
         setMiniPitchId(miniPitchId)
+        const bookingCur = booking
+        setBooking({
+            ...bookingCur,
+            "hourStart": time,
+            "miniPitchId": miniPitchId[0]
+        })
+    }
+
+    function handleOnClickOrderPitch() {
+
+
+        const pitchBooking = async () => {
+            if (localStorage.getItem('token') != null) {
+                const response = await pitchApi.booking(booking)
+                if (response.success === true) {
+                    navigate('/bookingdetail')
+                } else {
+                    document.getElementById('notification').classList.remove('hide')
+                    document.getElementById('notification').classList.add('show')
+                    function hideMessage() {
+                        document.getElementById('notification').classList.add('hide')
+                        document.getElementById('notification').classList.remove('show')
+
+                    }
+                    setTimeout(hideMessage, 5000)
+                }
+            }
+        }
+        if (localStorage.getItem('token') != null) {
+            pitchBooking();
+        } else {
+            navigate('/login')
+            console.log("HAHA")
+        }
+
+    }
+
+    function handleOnChangeMiniPitch(e) {
+        console.log(e.target.value + "jjjjjjjjjjjjjjj")
+        const bookingCur = booking
+        setBooking({
+            ...bookingCur,
+            "miniPitchId": e.target.value
+        })
     }
 
     const [hidden, setHidden] = useState({
@@ -225,7 +282,7 @@ function CardDetail(props) {
                         </div>
                         <div className="modal-body">
                             Sân số
-                            <select>
+                            <select onChange={handleOnChangeMiniPitch}>
                                 {miniPitch?.map(s => (
                                     <option key={s.miniPitchId} value={s.miniPitchId}>{s.name}</option>
                                 ))}
@@ -233,7 +290,7 @@ function CardDetail(props) {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="button" className="btn btn-primary">Đặt sân</button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={handleOnClickOrderPitch}>Đặt sân</button>
                         </div>
                     </div>
                 </div>

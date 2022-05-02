@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './card.css'
 import pitchApi from '../../api/pitchApi';
 import getPitchs from '../../services/ApiCaller';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 Card.propTypes = {
     pitchs: PropTypes.array,
     onPitchClick: PropTypes.func
@@ -17,6 +17,7 @@ Card.defaultProps = {
 function Card(props) {
 
     const { pitch, onPitchClick } = props;
+
 
     function handleClick(pitch) {
         if (onPitchClick) {
@@ -43,19 +44,36 @@ function Card(props) {
                                 {pitch.address.number} - {pitch.address.street}, {pitch.address.commune}, {pitch.address.district}, {pitch.address.city}
                             </div>
                             <div className='category b-b card-info-item'>
-                                Sân
+                                {/* {pitch?.detail[0]?.pitchTypeName} */}
+                                {pitch?.detail?.map((e, index) => (
+                                    (pitch?.detail?.length - 1 > index) ? `${e.pitchTypeName} - ` : `${e.pitchTypeName}`
+                                ))}
                             </div>
-                            <div className='price-time b-b card-info-item'>
+
+                            {pitch?.detail[0]?.timeSlots?.map((e, index) => {
+                                if (index < 2) {
+                                    return (
+                                        <div className='price-time b-b card-info-item'>
+                                            <span className='time'>{e.timeStart} - {e.timeEnd}, {(e.dayOfWeekStart < 7) ? `Thứ ${e.dayOfWeekStart + 1}` : "Chủ nhật"} -
+                                                {(e.dayOfWeekEnd < 7) ? `Thứ ${e.dayOfWeekEnd + 1}` : "Chủ nhật"}</span>
+                                            <span className='price'>{e.cost}VNĐ</span>
+                                        </div>
+                                    )
+                                }
+                            }
+                            )}
+
+                            {/* <div className='price-time b-b card-info-item'>
                                 <span className='time'>5:00 - 16:00 Thứ 2 - Chủ Nhật</span>
                                 <span className='price'>180.000VNĐ</span>
                             </div>
                             <div className='price-time b-b card-info-item'>
                                 <span className='time'>17:00 - 22:00 Thứ 2 - Chủ Nhật</span>
                                 <span className='price'>220.000VNĐ</span>
-                            </div>
+                            </div> */}
                             <div className='phone-number b-b card-info-item'>
                                 <span className='phone-number-title'>Số điện thoại:</span>
-                                <span className='phone-number-value'>0356112087</span>
+                                <span className='phone-number-value'>{pitch?.owner?.phone}</span>
                             </div>
                             <Link to={'/pitchdetail/' + pitch.pitchId}>
                                 <button className='button button--mimas'

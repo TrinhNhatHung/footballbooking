@@ -1,17 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
-import PropTypes from 'prop-types';
 import Header from './components/Header/Header';
-import Sidebar from './components/Sidebar/Sidebar';
-import Search from './components/Search/Search';
-import Card from './components/Card/Card';
 import '../src/assets/css/base.css';
-import Pagination from './components/Paganation/Pagination';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
 import PitchDetail from './pages/PitchDetail';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import BookingDetailPage from './pages/BookingDetailPage';
 
 // Home.propTypes = {
 //   pitch: PropTypes.string,
@@ -44,7 +41,9 @@ function App() {
         {console.log("render")}
         <Route path='/' element={<Home onPitchDetail={handlePitchDetail} />}></Route>
         <Route path={'/pitchdetail/:id'} element={<PitchDetail />}></Route>
-
+        <Route path={'/login'} element={<LoginPage />}></Route>
+        <Route path={'/signup'} element={<SignupPage />}></Route>
+        <Route path={'/bookingdetail'} element={<BookingDetailPage />}></Route>
       </Routes>
       <Footer />
     </div>

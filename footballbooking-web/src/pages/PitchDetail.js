@@ -5,6 +5,7 @@ import ReactDayPicker from '../components/DayPicker/ReactDayPicker';
 import pitchApi from '../api/pitchApi';
 import { Route, useParams } from 'react-router-dom';
 import "./pitchDetail.css"
+import AlertNotification from '../components/AlertNotification/AlertNotification';
 
 PitchDetail.propTypes = {
 
@@ -16,13 +17,9 @@ function PitchDetail(props) {
     let { id } = useParams()
     useEffect(() => {
         const fetchPitchDetail = async () => {
-
-            console.log("HAHA: " + id)
             const pitchId = id
-            console.log("id: " + pitchId)
             const response = await pitchApi.get(pitchId)
             setPitchDetail(response.data)
-            console.log("===============" + response.data)
         }
         fetchPitchDetail();
         console.log("pitch detail")
@@ -33,8 +30,7 @@ function PitchDetail(props) {
             < div className="container mf-30 p-0" >
                 <CardDetail pitchDetail={pitchDetail} />
             </div>
-
-
+            <AlertNotification />
         </div>
     );
 }
