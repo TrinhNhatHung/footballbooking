@@ -109,6 +109,7 @@ public class BookingResponse {
 				ObjectNode bookingNode = mapper.createObjectNode();
 				String bookingDateStr = DateUtil.convertLocalDateToString(booking.getBookingDate(), "dd/MM/yyyy");
 				String hourStartStr = DateUtil.convertLocalTimeToString(booking.getHourStart(), "HH:mm");
+				bookingNode.set("bookingId", mapper.convertValue(booking.getBookingId(), JsonNode.class));
 				bookingNode.set("time", mapper.convertValue(bookingDateStr + " " + hourStartStr, JsonNode.class));
 				bookingNode.set("status", mapper.convertValue(bookingStatus.getStatus().getStatusName(), JsonNode.class));
 				String miniPitchFullInfoUrl = env.getProperty("PITCH_SERVICE_GET_MINIPITCH_FULL_INFO");

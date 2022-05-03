@@ -176,6 +176,26 @@ public class BookingApi {
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 	
+	@PostMapping("/cancelBookingRequest")
+	public ResponseEntity<?> cancelBookingRequest (@RequestParam(name = "bookingId") Integer bookingId){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Booking booking = bookingService.getById(bookingId);
+			Status status= statusService.getByStatusName(StatusConst.STATUS_CANCELLED);
+			BookingStatus bookingStatus = new BookingStatus();
+			bookingStatus.setBooking(booking);
+			bookingStatus.setStatus(status);
+			Id id  = new Id(booking.getBookingId(), status.getStatusId());
+			bookingStatus.setBookingStatusId(id);
+			bookingStatusService.insert(bookingStatus);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+	}
+	
 	@PostMapping("/rejectBookingRequest")
 	public ResponseEntity<?> rejectBookingRequest (@RequestParam(name = "bookingId") Integer bookingId){
 		Map<String, Object> result = new HashMap<String, Object>();

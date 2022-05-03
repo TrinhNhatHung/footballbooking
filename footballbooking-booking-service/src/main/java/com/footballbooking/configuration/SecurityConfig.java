@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers("/getRequestBookingList", "/acceptBookingRequest").hasRole("PITCHOWNER")
-				.antMatchers("/book", "/getMyBooking").hasRole("CUSTOMER")
+				.antMatchers("/getRequestBookingList", "/acceptBookingRequest","/rejectBookingRequest","/cancelBookingRequest").hasRole("PITCHOWNER")
+				.antMatchers("/book", "/getMyBooking","/acceptBookingRequest","/rejectBookingRequest","/cancelBookingRequest").hasRole("CUSTOMER")
 				.antMatchers("/**").permitAll()
 				.anyRequest().authenticated();
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
