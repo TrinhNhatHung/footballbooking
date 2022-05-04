@@ -2,7 +2,8 @@ import './App.css';
 import Header from './components/Header/Header';
 import '../src/assets/css/base.css';
 import Footer from './components/Footer/Footer';
-import Home from './pages/Home';
+import Home from './pages/home';
+import Management from './pages/Management'
 import { Routes, Route } from 'react-router-dom';
 import PitchDetail from './pages/PitchDetail';
 import { useState, useEffect } from 'react';
@@ -44,6 +45,7 @@ function App() {
         <Route path={'/login'} element={<LoginPage />}></Route>
         <Route path={'/signup'} element={<SignupPage />}></Route>
         <Route path={'/bookingdetail'} element={<BookingDetailPage />}></Route>
+        <Route path='/management/booking' element={<Management/>}></Route>
       </Routes>
       <Footer />
     </div>
