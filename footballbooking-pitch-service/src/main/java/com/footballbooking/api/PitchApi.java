@@ -7,10 +7,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,11 +39,7 @@ public class PitchApi {
 						@RequestParam(name = "pitchTypeId", required = false) Integer pitchTypeId,
 						@RequestParam(name = "costMax", required = false) Integer costMax,
 						@RequestParam(name = "costMin", required = false) Integer costMin){
-		System.out.println(page);
-		System.out.println(limit);
-		System.out.println(searchByNameOrAddress);
-		System.out.println(pitchTypeId);
-		System.out.println(costMax);
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			List<Pitch> pitchs = pitchService.getByCondition(page, limit, searchByNameOrAddress, pitchTypeId, costMin, costMax);
@@ -72,9 +68,21 @@ public class PitchApi {
 		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
 	}
 	
-	@PostMapping("/add")
-	public String add () {
-		return "ok";
-	}
+	@GetMapping("/getMyPitch")
+    public ResponseEntity<?> getMyPitch (){
+		String userIdStr = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Integer userId = Integer.parseInt(userIdStr);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			List<Pitch> pitchs = pitchService.getByUserId(userId);
+			ArrayNode pitchListData = pitchResponse.responseCommonPitchList(pitchs);
+			result = ResponseUtil.createResponse(true, pitchListData, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		
+		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
+    }
 	
 }

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.footballbooking.entity.Pitch;
 import com.footballbooking.entity.PitchDetail;
 import com.footballbooking.entity.PitchType;
+import com.footballbooking.util.FirebaseUtil;
 import com.footballbooking.util.RestTemplateUtil;
 
 @Component
@@ -29,6 +30,9 @@ public class PitchResponse {
 
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private FirebaseUtil firebaseUtil;
 
 	public ArrayNode responsePitchList(List<Pitch> pitchs) throws JsonMappingException, JsonProcessingException {
 
@@ -49,6 +53,7 @@ public class PitchResponse {
 		String userServiceGetUserById = env.getProperty("USER_SERVICE_GET_USER_BY_ID");
 		userServiceGetUserById += pitch.getOwnerId();
 		JsonNode userData = restTemplateUtil.getObjectNode(userServiceGetUserById);
+		pitch.setCoverAvatarLink(firebaseUtil.getFileUrl(pitch.getCoverAvatar()));
 		JsonNode pitchData = mapper.convertValue(pitch, JsonNode.class);
 		restTemplateUtil.setJsonNode("owner", pitchData, userData);
 
@@ -79,5 +84,17 @@ public class PitchResponse {
 		}
 		restTemplateUtil.setJsonNode("detail", pitchData, detailArrayNode);
 		return pitchData;
+	}
+	
+	public ArrayNode responseCommonPitchList(List<Pitch> pitchs) {
+
+		ArrayNode pitchsData = mapper.createArrayNode();
+		for (Pitch pitch : pitchs) {
+			pitch.setCoverAvatarLink(firebaseUtil.getFileUrl(pitch.getCoverAvatar()));
+			JsonNode pitchData = mapper.convertValue(pitch, JsonNode.class);
+			pitchsData.add(pitchData);
+		}
+
+		return pitchsData;
 	}
 }

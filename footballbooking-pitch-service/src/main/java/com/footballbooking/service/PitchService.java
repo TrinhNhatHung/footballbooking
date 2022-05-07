@@ -35,4 +35,8 @@ public class PitchService {
 		pitch.setCoverAvatarLink(firebaseUtil.getFileUrl(pitch.getCoverAvatar()));
 		return pitch;
 	}
+	
+	public List<Pitch> getByUserId (Integer userId){
+		return pitchDao.getByUserId(userId);
+	}
 }

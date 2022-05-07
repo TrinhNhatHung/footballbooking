@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.authorizeRequests().antMatchers("/add").hasRole("PITCHOWNER").antMatchers("/**").permitAll().anyRequest()
+		http.authorizeRequests().antMatchers("/add","/getMyPitch").hasRole("PITCHOWNER").antMatchers("/**").permitAll().anyRequest()
 				.authenticated();
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		http.cors();
