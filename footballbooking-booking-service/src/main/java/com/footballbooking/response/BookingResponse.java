@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.footballbooking.constant.Constant;
+import com.footballbooking.constant.StatusConst;
 import com.footballbooking.entity.Booking;
 import com.footballbooking.entity.BookingStatus;
 import com.footballbooking.service.BookingService;
@@ -105,6 +106,12 @@ public class BookingResponse {
 		ArrayNode result = mapper.createArrayNode();
 		for (Booking booking : bookings) {
 			List<BookingStatus> bookingStatuses = booking.getBookingStatuses();
+			boolean isCanceled = bookingStatuses.stream()
+							.map(BookingStatus::getStatus)
+							.anyMatch(status -> status.getStatusName().equals(StatusConst.STATUS_CANCELLED) || status.getStatusName().equals(StatusConst.STATUS_REJECTED));
+			if (isCanceled) {
+				continue;
+			}
 			for (BookingStatus bookingStatus : bookingStatuses) {
 				ObjectNode bookingNode = mapper.createObjectNode();
 				String bookingDateStr = DateUtil.convertLocalDateToString(booking.getBookingDate(), "dd/MM/yyyy");
