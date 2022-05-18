@@ -1,5 +1,7 @@
 package com.footballbooking.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +30,14 @@ public class UserService {
 	
 	public User getByPhoneAndPassword (String phone, String password) {
 		return userDao.getByPhoneAndPassword(phone, password);
+	}
+	
+	public List<User> getAllCustomerAndPitchOwner () {
+		return userDao.getAllCustomerAndPitchOwner();
+	}
+	
+	@Transactional
+	public void toggleStatus (int userId) {
+		userDao.toggleStatus(userId);
 	}
 }
