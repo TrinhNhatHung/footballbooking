@@ -43,14 +43,38 @@ const pitchApi = {
         };
 
         return axiosClientPost(config)
-        // .then((response) => {
-        //     console.log("aaa")
-        //     console.log(response)t
-        //     return response;
-        // })
-        // .catch((error) => {
-        //     return "as";
-        // });
+
+    },
+
+    bookingInfor: () => {
+        var data = new FormData();
+        var config = {
+            url: "/bookingservice/getMyBooking",
+            method: "GET",
+            data,
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                ...data.getHeaders,
+            },
+        };
+
+        return axiosClientPost(config)
+    },
+
+    cancelBooking: (bookingId) => {
+        var data = new FormData();
+        data.append("bookingId", bookingId);
+        var config = {
+            url: "/bookingservice/cancelBookingRequest",
+            method: "POST",
+            data,
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                ...data.getHeaders,
+            },
+        };
+
+        return axiosClientPost(config)
     }
 }
 

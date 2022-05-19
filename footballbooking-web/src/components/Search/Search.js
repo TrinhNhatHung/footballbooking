@@ -33,7 +33,7 @@ function Search(props) {
 
         <div className="row mb-30">
             <div className="col-xs-10 col-sm-10 col-md-10 col-lg-8 p-0">
-                <input type="search" name="" id="input" className="control-form search-input pl-10" required="required" title="" placeholder='Nhập tên sân hoặc là địa chỉ...'
+                <input type="search" name="" id="input" className="control-form search-input pl-10" required="required" title="" placeholder='Search...'
                     value={searchTerm}
                     onChange={handleSearchTermChange} />
             </div>

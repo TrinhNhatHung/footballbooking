@@ -105,16 +105,9 @@ function Home(props) {
                 {pitchs.map(p => (
                     <Card key={p.pitchId} pitch={p} onPitchClick={handlePitchClick} />
                 ))}
-                {/* <Routes>
-                    <Route path='/' element={<Home filter={filter} />}></Route>
-                    <Route path='/pitchdetail' element={<PitchDetail />}></Route>
-                </Routes> */}
                 <Pagination onClickPagination={handleClickPagination} />
             </div>
         </div>
-
-
-
     );
 }
 

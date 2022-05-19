@@ -21,14 +21,12 @@ function LoginPage(props) {
             ...inputV
         })
         const checkLogin = async () => {
-            console.log("before")
             const response = await userApi.checkLogin(inputV);
-            console.log("after")
-            console.log("ax" + response.data.token)
             if (response.data.isAuthen === true) {
                 localStorage.setItem('token', response.data.token)
-                console.log(navigate(-1))
-                navigate(-1)
+                localStorage.setItem('role', response.data.role)
+                localStorage.setItem('fullname', response.data.fullName)
+                navigate('/')
             } else {
                 console.log("ERROR")
             }
@@ -36,21 +34,10 @@ function LoginPage(props) {
         checkLogin()
     }
 
-
-
-    // useEffect(() => {
-    //     checkLogin();
-    // }, [input])
-
-
     return (
         <div>
-            {/* {
-                (localStorage.getItem('token') != null) ? <AlertNotification message="Đã đăng nhập thành công !" /> : ""
-            } */}
             <Login onClickLogin={handleClickLogin} />
         </div>
-
 
     );
 }

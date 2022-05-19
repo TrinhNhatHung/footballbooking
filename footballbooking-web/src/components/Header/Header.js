@@ -27,7 +27,9 @@ function Header(props) {
     }
 
     function handleLogout() {
+        localStorage.removeItem('role')
         localStorage.removeItem('token')
+        localStorage.removeItem('fullname')
     }
 
     return (
@@ -48,10 +50,26 @@ function Header(props) {
                                             <li><a href="#">Welcome</a></li>
                                         </ul>
                                         <ul className="nav navbar-nav navbar-right">
-                                            {/* (localStorage.getItem('token')) !== null ? "./bookingdetail" : "login" */}
-                                            <li><span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Sân đặt</span></li>
+
+                                            {(localStorage.getItem('role') === 'ROLE_PITCHOWNER')
+                                                ? <li><span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Chủ sân</span></li>
+                                                : ((localStorage.getItem('role') === 'ROLE_ADMIN')
+                                                    ? <li><a href="#" className="dropdown-toggle" data-toggle="dropdown"> Admin <span className="caret" /></a>
+                                                        <ul className="dropdown-menu">
+                                                            <li><Link to="./list-user">Danh sách người dùng</Link></li>
+                                                            <li><Link to="./add-user">Thêm người dùng</Link></li>
+                                                        </ul>
+                                                    </li>
+                                                    : <li> <span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Sân đặt</span>
+                                                    </li>
+                                                )
+
+                                            }
+
                                             <li><a href="#"><span className="glyphicon glyphicon-user" /> Profile</a></li>
-                                            <li><a href="#" className="dropdown-toggle" data-toggle="dropdown"><span className="glyphicon glyphicon-log-in" /> Login / Sign Up <span className="caret" /></a>
+                                            <li><a href="#" className="dropdown-toggle" data-toggle="dropdown"><span className="glyphicon glyphicon-log-in" /> Login / Sign Up
+                                                {(localStorage.getItem('fullname') !== null) ? ` (${localStorage.getItem('fullname')})` : ''}
+                                                <span className="caret" /></a>
                                                 <ul className="dropdown-menu">
                                                     {(localStorage.getItem('token')) !== null ? '' : <li><Link to="./login">Login</Link></li>}
                                                     <li><Link to="./signup">Sign Up</Link></li>
@@ -66,7 +84,7 @@ function Header(props) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
