@@ -32,8 +32,8 @@ public class UserService {
 		return userDao.getByPhoneAndPassword(phone, password);
 	}
 	
-	public List<User> getAllCustomerAndPitchOwner () {
-		return userDao.getAllCustomerAndPitchOwner();
+	public List<User> getAllCustomerAndPitchOwner (Integer page, Integer limit, String searchByPhone, Integer roleId) {
+		return userDao.getAllCustomerAndPitchOwner(page, limit, searchByPhone, roleId);
 	}
 	
 	@Transactional

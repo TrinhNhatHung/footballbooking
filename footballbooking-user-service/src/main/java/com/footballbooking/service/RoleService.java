@@ -15,4 +15,5 @@ public class RoleService {
 	public Role getByRoleName (String roleName) {
 		return roleDao.getByRoleName(roleName);
 	}
+	
 }

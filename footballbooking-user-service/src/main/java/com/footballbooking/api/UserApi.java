@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.footballbooking.constant.MessageConst;
 import com.footballbooking.constant.RoleConst;
 import com.footballbooking.entity.Role;
@@ -96,11 +95,18 @@ public class UserApi {
 	}
 	
 	@GetMapping("/getAllUser")
-	public ResponseEntity<?> getAllUser (){
+	public ResponseEntity<?> getAllUser (@RequestParam(name = "page", required = false) Integer page,
+					@RequestParam(name = "limit", required = false) Integer limit,
+					@RequestParam(name = "searhByNameOrPhone", required = false) String searchByNameOrPhone,
+					@RequestParam(name = "roleId", required = false) Integer roleId){
+		page = page == null ? 1 : page;
+		limit = limit == null ? 5 : limit;
+		searchByNameOrPhone = searchByNameOrPhone == null ? "" : searchByNameOrPhone;
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			List<User> users = userService.getAllCustomerAndPitchOwner();
-			ArrayNode usersData = userResponse.getAllUser(users);
+			List<User> users = userService.getAllCustomerAndPitchOwner(page, limit, searchByNameOrPhone, roleId);
+			JsonNode usersData = userResponse.getAllUser(users);
 			result = ResponseUtil.createResponse(true, usersData, "");
 		} catch (Exception e) {
 			result = ResponseUtil.createResponse(false, null, "");
