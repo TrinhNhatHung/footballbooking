@@ -59,7 +59,7 @@ color: white;
 border-radius: 5px;
 padding: 5px 15px 5px 15px;
 border: none;
-`;  
+`;
 
 const PitchList = () => {
   return (
@@ -95,8 +95,8 @@ const PitchList = () => {
                 </td>
                 <td>
                   <Action>
-                  <Add style={{ marginBottom: "10px" }}>Đặt sân</Add>
-                  <Add style={{ marginBottom: "10px" }}>Sửa thông tin</Add>
+                    <Add style={{ marginBottom: "10px" }}>Đặt sân</Add>
+                    <Add style={{ marginBottom: "10px" }}>Sửa thông tin</Add>
                     <Cancel>Xoá</Cancel>
                   </Action>
                 </td>

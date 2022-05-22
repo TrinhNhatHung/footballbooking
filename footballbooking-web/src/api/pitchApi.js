@@ -17,8 +17,6 @@ const pitchApi = {
 
     getFreeTimeSlot: (params) => {
         const url = 'bookingservice/getFreeTimeSlot';
-        console.log("AHAHAHAL : ")
-        console.log(params)
         return axiosClient.get(url, { params: params });
     },
 

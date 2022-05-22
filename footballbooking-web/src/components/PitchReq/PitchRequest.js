@@ -83,25 +83,25 @@ const PitchRequest = () => {
               <tr>
                 <td>1</td>
                 <td>Sân chuyên việt</td>
-                <td>Loại sân: 5 <br/> Sân số: 1</td>
+                <td>Loại sân: 5 <br /> Sân số: 1</td>
                 <td>Trọn bùi</td>
                 <td>17:00 - 18:00 ngày 28/04/2022</td>
                 <td>xin slot</td>
                 <td>
                   <Accept style={{ marginRight: "10px" }}>Chấp nhận</Accept>
-                  <Deny>Từ chối</Deny> 
+                  <Deny>Từ chối</Deny>
                 </td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>Sân chuyên việt</td>
-                <td>Loại sân: 5 <br/> Sân số: 1</td>
+                <td>Loại sân: 5 <br /> Sân số: 1</td>
                 <td>Trọn bùi</td>
                 <td>17:00 - 18:00 ngày 28/04/2022</td>
                 <td>xin slot</td>
                 <td>
                   <Accept style={{ marginRight: "10px" }}>Chấp nhận</Accept>
-                  <Deny>Từ chối</Deny> 
+                  <Deny>Từ chối</Deny>
                 </td>
               </tr>
             </Tbody>

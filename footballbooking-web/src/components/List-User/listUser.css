@@ -6,3 +6,28 @@
 .title-list {
     text-align: center;
 }
+
+.warning {
+    background: #ffd053;
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.accept {
+    background: #0ce810;
+    padding: 4px;
+    border-radius: 2px;
+    min-width: 20px;
+    text-align: center;
+    padding: auto;
+}
+
+.cancel {
+    background: #ff6262;
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.center {
+    text-align: center;
+}

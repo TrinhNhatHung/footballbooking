@@ -68,15 +68,9 @@ function Home(props) {
     function handleClickPagination(type) {
         const filterNew = filter
         let page = filter.page
-        console.log("LE: " + pitchs.length)
         if (type === 'next') {
-            console.log("aaaaa")
-            console.log(pitchs.length)
-            console.log(filter.limit)
-            console.log("aaaaa")
             if (pitchs.length === filter.limit) {
                 page = page + 1
-                console.log("aaaaannn")
             }
         } else {
             if (filter.page !== 1) {
