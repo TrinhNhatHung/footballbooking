@@ -3,16 +3,18 @@ import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 
-const datePicker = () => {
+const datePicker = (props) => {
     const [date, setDate] = useState(moment());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-
+    
     const onChange = (event, selectedDate) => {
         // const currentDate = selectedDate;
         // setShow(false);
         setShow(false);
         setDate(moment(selectedDate));
+        props.parentCallback(moment(selectedDate).format('YYYY/MM/DD'));
+        props.updateFreeTime(moment(selectedDate).format('YYYY/MM/DD'), props.pitchId, props.pitchTypeId)
     };
 
     const showMode = (currentMode) => {
