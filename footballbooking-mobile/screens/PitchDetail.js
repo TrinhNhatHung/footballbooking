@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View, ScrollView, Platform, Image, Dimensions, TouchableOpacity, } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, ScrollView, Platform, Image, Dimensions, TouchableOpacity, Alert, ActivityIndicator, Modal, Pressable } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Constants from 'expo-constants'
 import { StatusBar } from 'expo-status-bar';
 import { Entypo, FontAwesome, } from '@expo/vector-icons';
-import moment from 'moment'
+import moment from 'moment';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import PitchItem from '../components/pitchItem';
 import Search from '../components/search';
@@ -13,9 +15,175 @@ import TimeSlot from '../components/timeSlot';
 import anhSanBong from '../assets/images/sanbong.jpg'
 
 const PitchDetail = ({ route, navigation }) => {
-  const {pitch} = route.params
+  const apiURL = 'http://172.14.0.3:8080/';
+  const { pitch } = route.params
   const [showCalender, setShowCalender] = useState(false);
+  const [pitchTypeId, setPitchTypeId] = useState('1');
   const [isReady, setisReady] = useState(true);
+  const [hourStart, setHourStart] = useState({
+    hourStart:'00:00',
+    miniPitchId: [],
+    modalVisible: false,
+  });
+
+  const [date, setDate] = useState({
+    date: moment().format('YYYY/MM/DD').toString()
+
+  })
+  const getDate = (childData) => {
+    setDate({ date: childData })
+  }
+
+  // const getTime = (childData) => {
+  //   setHourStart({ hourStart: childData })
+  // }
+
+  arrayA = []
+  arrayTemp = []
+  count = 0;
+
+  // const [modalVisible, setModalVisible] = useState(false);
+  const [userToken, setUserToken] = useState('')
+
+  useEffect(() => {
+    getData();
+
+    return () => {
+
+    }
+  }, [])
+
+  const getData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken')
+      setUserToken({ userToken: token })
+      if (token !== null) {
+        // value previously stored
+      }
+      console.log(userToken);
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  const [freeTime, setFreeTime] = useState({
+    loading: true,
+    data: [],
+  })
+  // const [arrayFreeTime, setArrayFreeTime] = useState([])
+  // const [isLoadingFreeTime, setIsLoadingFreeTime] = useState(true)
+  const callGetFreeTimeSlot = async (bookingDate, pitchId, pitchTypeId) => {
+    try {
+      setFreeTime({
+        loading: true,
+        data: [],
+        pitchTypeId: pitchTypeId
+      })
+      const res = await axios.get(`${apiURL}bookingservice/getFreeTimeSlot?bookingDate=${bookingDate}&pitchId=${pitchId}&pitchTypeId=${pitchTypeId}`);
+      // setFreeTime({
+      //   loading: false,
+      //   data: res.data
+      // })
+      count = 0;
+      res.data.data.forEach(function (element) {
+        if (element.hasPitch == true) {
+          count = arrayTemp.push({
+            timeStart: element.timeStart,
+            miniPitchId: element.miniPitchId
+          })
+
+          // console.log(element.timeStart)
+        }
+        console.log(arrayTemp)
+        // console.log(arrayFreeTime)
+      })
+      setFreeTime({
+        loading: false,
+        data: arrayTemp,
+        pitchTypeId: pitchTypeId
+      })
+      // setIsLoadingFreeTime({ isLoadingFreeTime: false })
+      // arrayA = res.data.data
+      // arrayTemp = [0]
+      // arrayA.forEach(function (element) {
+      //   if (element.hasPitch == true) {
+      //     // arrayTemp = arrayTemp.push(element.timeStart)
+      //     // setArrayFreeTime(arrayTemp)
+      //     console.log(element.timeStart)
+      //   }
+      //   // console.log(element.timeStart)
+      // });
+      // console.log(arrayA)
+      // console.log(arrayTemp)
+      // console.log(res.data.data)
+    } catch (error) {
+      setFreeTime(JSON.stringify(error.message))
+    }
+  }
+
+  // const getArrayFreeTimeSlot = (array) => {
+  //   arrayTemp = []
+  //   count = 0
+  //   array.forEach(function (element) {
+  //     if (element.hasPitch == true) {
+  //       count = arrayTemp.push(element.timeStart)
+  //       setArrayFreeTime(arrayTemp)
+  //       // console.log(element.timeStart)
+  //     }
+  //     console.log(arrayTemp)
+  //     // console.log(arrayFreeTime)
+  //   })
+  // }
+
+  const [postBooking, setPostBooking] = useState({
+    "success": false,
+  });
+  const bookingHandle = (token, timeStart, miniPitchId, bookingDate) => {
+    axios.post(`${apiURL}bookingservice/book`, {
+      hourStart: String(timeStart),
+      miniPitchId: String(miniPitchId),
+      bookingDate: String(bookingDate),
+      // phone: userName,
+      // password: password
+    }, {
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(response => {
+        // console.log(response.data.data)
+        return response
+      })
+      .then((response => {
+        // userAuthen = response.data.data.isAuthen
+        setPostBooking(response.data.success)
+        console.log(postBooking)
+        if (!response.data.success) {
+          Alert.alert('Booking failed', 'Please try again!', [
+            { text: 'Okay' }
+          ]);
+          // setHourStart({
+          //   hourStart: hourStart.hourStart,
+          //   miniPitchId: hourStart.miniPitchId.splice(hourStart.miniPitchId.indexOf('miniPitchId'),1),
+          //   modalVisible: !hourStart.modalVisible
+          // })
+          return;
+        }
+        Alert.alert('Success', 'Your booking has been sent', [
+          { text: 'Okay' }
+        ]);
+        hourStart.miniPitchId.splice(hourStart.miniPitchId.indexOf(miniPitchId),1)
+        setHourStart({
+          hourStart: hourStart.hourStart,
+          miniPitchId: hourStart.miniPitchId,
+          modalVisible: !hourStart.modalVisible
+        })
+        console.log(hourStart.miniPitchId)
+      }))
+      .catch(error => console.log(error));
+  }
+
   return (
     <View style={styles.container}>
       {/* <StatusBar translucent backgroundColor='transparent' /> */}
@@ -48,75 +216,117 @@ const PitchDetail = ({ route, navigation }) => {
           paddingVertical: 20
         }}>
           {showCalender ?
-            <View style={{ 
-              flexDirection: 'row', 
-              height: 200, 
-              borderBottomColor: '#d9d9d9', 
+            <View style={{
+              flexDirection: 'row',
+              minHeight: 90,
+              borderBottomColor: '#d9d9d9',
               borderBottomWidth: 1,
-              borderTopColor: '#d9d9d9', 
+              borderTopColor: '#d9d9d9',
               borderTopWidth: 1,
               paddingVertical: 10,
-              }}>
+            }}>
               <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                <DatePicker></DatePicker>
-                <TouchableOpacity style ={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderWidth: 1,
-                  width: 100,
-                  height: 30,
-                  paddingHorizontal: 10,
-                  marginLeft: 16,
-                  backgroundColor: '#368340',
-                }}>
-                  <Text style={{color: 'white', textTransform: 'uppercase',}}>Đặt sân</Text>
-                </TouchableOpacity>
+                <DatePicker parentCallback={getDate} updateFreeTime={callGetFreeTimeSlot} pitchId={pitch.pitchId} pitchTypeId={freeTime.pitchTypeId}></DatePicker>
+                {
+                  // console.log(date.date + "..." + pitch.pitchId + "..." + pitchTypeId.pitchTypeId)
+                  // callGetFreeTimeSlot(date.date, pitch.pitchId, pitchTypeId.pitchTypeId)
+                }
+                {/* <TouchableOpacity
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    width: 100,
+                    height: 30,
+                    paddingHorizontal: 10,
+                    marginLeft: 16,
+                    marginBottom: 10,
+                    backgroundColor: '#368340',
+                  }}
+                  onPress={() => {
+                    bookingHandle(userToken.userToken, hourStart.hourStart, '1', date.date);
+                    // console.log(userToken.userToken+'.....'+hourStart.hourStart+'......'+'1'+'.......'+ date.date)
+                  }}
+                >
+                  <Text style={{ color: 'white', textTransform: 'uppercase', }}>Đặt sân</Text>
+                </TouchableOpacity> */}
               </View>
-              <View style={{
-                flex: 3,
-                //alignItems: 'center',
-                justifyContent: 'space-around',
-                flexDirection: 'row',
-                paddingLeft: 60,
-                paddingRight: 10,
-                
-              }}>
-                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <TimeSlot time={'5:00'}></TimeSlot>
-                  <TimeSlot time={'6:00'}></TimeSlot>
-                  <TimeSlot time={'7:00'}></TimeSlot>
-                  <TimeSlot time={'8:00'}></TimeSlot>
-                  
+              {(freeTime.loading) ?
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <ActivityIndicator size="large" />
+                  {/* {console.log(isLoadingFreeTime)} */}
+                </View>
+                : (
+                  <View style={{
+                    // flex: 3,
+                    // //alignItems: 'center',
+                    // justifyContent: 'space-around',
+                    // flexDirection: 'row',
+                    paddingLeft: 115,
+                    // paddingRight: 10,
+
+                    marginRight: 5,
+                    flexWrap: 'wrap',
+                    flexDirection:'row'
+                  }}>
+                    {/* <FlatList
+                  data={arrayFreeTime}
+                  renderItem={({ item }) => <TimeSlot time={item} parentCallback={getTime}/>}
+                  keyExtractor={item => item.id}
+                /> */}
+                    {freeTime.data.map(freeTime => (
+                      // <TimeSlot time={freeTime.timeStart} parentCallback={getTime} />
+                      <View style={styles.timeSlotContainer}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setHourStart({ 
+                              hourStart: freeTime.timeStart,
+                              miniPitchId: freeTime.miniPitchId,
+                              modalVisible: true,
+                             });
+                            // setModalVisible(true)
+                          }}>
+                          <Text>{freeTime.timeStart}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                    {/* {console.log(freeTime.data.timeStart)} */}
+                    {/* <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <TimeSlot time={'05:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'06:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'07:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'08:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+
                 </View>
 
                 <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <TimeSlot time={'9:00'}></TimeSlot>
-                  <TimeSlot time={'10:00'}></TimeSlot>
-                  <TimeSlot time={'11:00'}></TimeSlot>
-                  <TimeSlot time={'12:00'}></TimeSlot>
-                  
+                  <TimeSlot time={'09:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'10:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'11:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'12:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+
                 </View>
 
 
                 <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <TimeSlot time={'13:00'}></TimeSlot>
-                  <TimeSlot time={'14:00'}></TimeSlot>
-                  <TimeSlot time={'15:00'}></TimeSlot>
-                  <TimeSlot time={'16:00'}></TimeSlot>
-                  
+                  <TimeSlot time={'13:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'14:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'15:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'16:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+
                 </View>
 
                 <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <TimeSlot time={'17:00'}></TimeSlot>
-                  <TimeSlot time={'18:00'}></TimeSlot>
-                  <TimeSlot time={'19:00'}></TimeSlot>
-                  <TimeSlot time={'20:00'}></TimeSlot>
-                  
-                </View>
+                  <TimeSlot time={'17:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'18:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'19:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+                  <TimeSlot time={'20:00'} arrayFreeTime={arrayFreeTime} parentCallback={getTime}></TimeSlot>
+
+                </View> */}
 
 
 
-              </View>
+                  </View>)}
 
 
 
@@ -124,6 +334,85 @@ const PitchDetail = ({ route, navigation }) => {
             : null}
 
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={hourStart.modalVisible}
+          // onRequestClose={() => {
+          //   Alert.alert("Modal has been closed.");
+          //   setHourStart({
+          //     hourStart: hourStart.hourStart,
+          //     miniPitchId: hourStart.miniPitchId,
+          //     modalVisible: !hourStart.modalVisible
+          //   });
+          // }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Chọn sân</Text>
+              {/* <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable> */}
+             
+              { (hourStart.miniPitchId.length != 0) ?
+              hourStart.miniPitchId.map(miniPitchId => (
+                <TouchableOpacity
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    width: 100,
+                    height: 30,
+                    paddingHorizontal: 10,
+                    marginLeft: 16,
+                    marginBottom: 10,
+                    backgroundColor: '#368340',
+                  }}
+                  onPress={() => {
+                    bookingHandle(userToken.userToken, hourStart.hourStart, miniPitchId, date.date);
+                    setHourStart({
+                      hourStart: hourStart.hourStart,
+                      miniPitchId: hourStart.miniPitchId,
+                      modalVisible: !hourStart.modalVisible
+                    })
+                    // console.log(userToken.userToken+'.....'+hourStart.hourStart+'......'+freeTime+'.......'+ date.date)
+                  }}
+                >
+                  <Text style={{ color: 'white', textTransform: 'uppercase', }}>{miniPitchId}</Text>
+                </TouchableOpacity>
+              )):
+              <TouchableOpacity
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    width: 100,
+                    height: 30,
+                    paddingHorizontal: 10,
+                    marginLeft: 16,
+                    marginBottom: 10,
+                    backgroundColor: '#368340',
+                  }}
+                  onPress={() => {
+                    setHourStart({
+                      hourStart: hourStart.hourStart,
+                      miniPitchId: hourStart.miniPitchId,
+                      modalVisible: !hourStart.modalVisible
+                    })
+                    // console.log(userToken.userToken+'.....'+hourStart.hourStart+'......'+freeTime+'.......'+ date.date)
+                  }}
+                >
+                  <Text style={{ color: 'white', textTransform: 'uppercase', }}>Tạm thời hết sân</Text>
+                </TouchableOpacity>
+              }
+            </View>
+          </View>
+        </Modal>
+
         <View style={styles.listContainer}>
           <View style={{ flexDirection: 'row', flex: 1 }} >
             <View style={{ margin: 5 }}>
@@ -159,7 +448,13 @@ const PitchDetail = ({ route, navigation }) => {
                     right: 0,
                     zIndex: 10,
                   }}
-                  onPress={() => setShowCalender({ showCalender: true })}
+                  onPress={() => {
+                    setShowCalender({ showCalender: true })
+                    setPitchTypeId({ pitchTypeId: 1 })
+                    callGetFreeTimeSlot(date.date, pitch.pitchId, 1)
+                    // getArrayFreeTimeSlot(arrayA)
+                  }}
+
                 >
                   <FontAwesome name="calendar-check-o" size={20} color="black" />
                 </TouchableOpacity>
@@ -167,12 +462,21 @@ const PitchDetail = ({ route, navigation }) => {
               <View style={styles.timePrice}>
                 <Text style={styles.time}>17:00 - 22:00 Thứ 2 - Chủ Nhật</Text>
                 <Text style={styles.price}>220.000VNĐ</Text>
-                <TouchableOpacity style={{
-                  position: 'absolute',
-                  top: 3,
-                  right: 0,
-                  zIndex: 10,
-                }}>
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    top: 3,
+                    right: 0,
+                    zIndex: 10,
+                  }}
+                  onPress={() => {
+                    setShowCalender({ showCalender: true })
+                    setPitchTypeId({ pitchTypeId: 1 })
+                    callGetFreeTimeSlot(date.date, pitch.pitchId, 1)
+                    // getArrayFreeTimeSlot(arrayA)
+                  }}
+
+                >
                   <FontAwesome name="calendar-check-o" size={20} color="black" />
                 </TouchableOpacity>
               </View>
@@ -188,24 +492,42 @@ const PitchDetail = ({ route, navigation }) => {
               <View style={styles.timePrice}>
                 <Text style={styles.time}>5:00 - 16:00   Thứ 2 - Chủ Nhật</Text>
                 <Text style={styles.price}>180.000VNĐ</Text>
-                <TouchableOpacity style={{
-                  position: 'absolute',
-                  top: 3,
-                  right: 0,
-                  zIndex: 10,
-                }}>
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    top: 3,
+                    right: 0,
+                    zIndex: 10,
+                  }}
+                  onPress={() => {
+                    setShowCalender({ showCalender: true })
+                    setPitchTypeId({ pitchTypeId: 2 })
+                    callGetFreeTimeSlot(date.date, pitch.pitchId, 2)
+                    // getArrayFreeTimeSlot(arrayA)
+                  }}
+
+                >
                   <FontAwesome name="calendar-check-o" size={20} color="black" />
                 </TouchableOpacity>
               </View>
               <View style={styles.timePrice}>
                 <Text style={styles.time}>17:00 - 22:00 Thứ 2 - Chủ Nhật</Text>
                 <Text style={styles.price}>220.000VNĐ</Text>
-                <TouchableOpacity style={{
-                  position: 'absolute',
-                  top: 3,
-                  right: 0,
-                  zIndex: 10,
-                }}>
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    top: 3,
+                    right: 0,
+                    zIndex: 10,
+                  }}
+                  onPress={() => {
+                    setShowCalender({ showCalender: true })
+                    setPitchTypeId({ pitchTypeId: 2 })
+                    callGetFreeTimeSlot(date.date, pitch.pitchId, 2)
+                    // getArrayFreeTimeSlot(arrayA)
+                  }}
+
+                >
                   <FontAwesome name="calendar-check-o" size={20} color="black" />
                 </TouchableOpacity>
               </View>
@@ -349,5 +671,37 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textTransform: 'uppercase',
+  },
+  timeSlotContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    width: 58,
+    height: 30,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
 })
