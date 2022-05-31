@@ -1,6 +1,10 @@
 .list {
-  width: 100%;
-  padding: 20px;
-  background-color: #FAF5E4;
-  border-radius: 10px;
+    width: 100%;
+    padding: 20px;
+    background-color: #FAF5E4;
+    border-radius: 10px;
+}
+
+td {
+    text-align: left;
 }

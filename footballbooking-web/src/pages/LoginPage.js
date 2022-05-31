@@ -26,7 +26,11 @@ function LoginPage(props) {
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('role', response.data.role)
                 localStorage.setItem('fullname', response.data.fullName)
-                navigate('/')
+                if (response.data.role === "ROLE_CUSTOMER"){
+                    navigate('/');
+                } else if(response.data.role === "ROLE_PITCHOWNER"){
+                    navigate('/pitchowner/booking');   
+                }
             } else {
                 console.log("ERROR")
             }
