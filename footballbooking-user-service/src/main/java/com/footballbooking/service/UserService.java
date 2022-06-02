@@ -20,6 +20,11 @@ public class UserService {
 		userDao.insert(user);
 	}
 	
+	@Transactional
+	public void update (User user) {
+		userDao.update(user);
+	}
+	
 	public User getByPhone (String phone) {
 		return userDao.getByPhone(phone);
 	}

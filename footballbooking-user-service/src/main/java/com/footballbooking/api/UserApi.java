@@ -94,10 +94,10 @@ public class UserApi {
 		return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getAllUser")
+	@PostMapping("/getAllUser")
 	public ResponseEntity<?> getAllUser (@RequestParam(name = "page", required = false) Integer page,
 					@RequestParam(name = "limit", required = false) Integer limit,
-					@RequestParam(name = "searhByNameOrPhone", required = false) String searchByNameOrPhone,
+					@RequestParam(name = "searchByNameOrPhone", required = false) String searchByNameOrPhone,
 					@RequestParam(name = "roleId", required = false) Integer roleId){
 		page = page == null ? 1 : page;
 		limit = limit == null ? 5 : limit;
@@ -140,6 +140,25 @@ public class UserApi {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			userService.toggleStatus(userId);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		
+		return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/updateProfile")
+	public ResponseEntity<?> updateUser (@ModelAttribute User user){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			User currentUser = userService.getById(user.getUserId());
+			if (currentUser == null) {
+				throw new RuntimeException();
+			} else {
+				userService.update(user);
+			}
 			result = ResponseUtil.createResponse(true, null, "");
 		} catch (Exception e) {
 			e.printStackTrace();
