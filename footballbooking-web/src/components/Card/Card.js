@@ -27,12 +27,13 @@ function Card(props) {
 
     return (
         <div className="row">
+            {console.log(pitch)}
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-0">
                 <div className='card'>
                     <div className="row">
                         <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 card-image">
                             <div className=''>
-                                <img className='card-image-link' src='https://thegioithethao.vn/upload_images/images/2021/01/31/san-bong-da-osaka-img1.jpg' />
+                                <img className='card-image-link' src={require('../../assets/images/' + pitch.coverAvatar)} />
                             </div>
                         </div>
 

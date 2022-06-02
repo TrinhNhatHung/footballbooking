@@ -110,13 +110,7 @@ function Register(props) {
             <Container>
                 <Introduce>
                     <Caption>PITCH MANAGEMENT, FIND AN OPPONENT, BOOKING PITCH ONLINE</Caption>
-                    <List>
-                        <ListItem>Free 100%</ListItem>
-                        <ListItem>Easily find opponents</ListItem>
-                        <ListItem>Efficient management, saving time</ListItem>
-                        <ListItem>Productivity optimization</ListItem>
-                    </List>
-                    <Detail>View Detail</Detail>
+
                 </Introduce>
                 <Wrapper>
                     <Title>CREATE AN ACCOUNT</Title>

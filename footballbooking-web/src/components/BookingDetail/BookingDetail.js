@@ -28,8 +28,8 @@ function BookingDetail(props) {
     useEffect(() => {
         const bookingInfor = async () => {
             const response = await pitchApi.bookingInfor()
-            setListBooking(response.data)
-            console.log(response.data)
+            setListBooking(response.data.sort((a, b) => a.time - b.time))
+            console.log(response.data.sort((a, b) => a.time - b.time))
         }
         bookingInfor();
         console.log("bookingInfor")
@@ -39,7 +39,7 @@ function BookingDetail(props) {
     return (
         <div className='container mt-50'>
             <div className="card-booking-detail">
-
+                <h2 style={{ marginBottom: '30px' }}>Danh sách sân đặt</h2>
                 <table className="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -63,25 +63,26 @@ function BookingDetail(props) {
                                     <button className={(e.status === 'Chờ xác nhận') ? 'btn btn-large btn-block btn-danger' : 'btn btn-large btn-block btn-danger disabled'} data-toggle="modal" data-target={`#exampleModalDetail${e.bookingId}`} >
                                         <span>Hủy</span>
                                     </button>
-                                    <div className="modal fade" id={`exampleModalDetail${e.bookingId}`} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div className="modal-dialog" role="document">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <h5 className="modal-title" id="exampleModalLabel">Hủy Sân</h5>
-                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <div>Bạn có muốn hủy sân không {e.bookingId}?</div>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => handleOnClickDeletePitch(e.bookingId)}>Hủy sân</button>
+                                    {(e.status === "Chờ xác nhận") ?
+                                        <div className="modal fade" id={`exampleModalDetail${e.bookingId}`} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div className="modal-dialog" role="document">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <h5 className="modal-title" id="exampleModalLabel">Hủy Sân</h5>
+                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <div>Bạn có muốn hủy sân {e.bookingId} không?</div>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                                        <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => handleOnClickDeletePitch(e.bookingId)}>Hủy sân</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </div> : ""}
                                 </td>
 
                             </tr>

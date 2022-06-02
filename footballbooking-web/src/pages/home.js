@@ -93,7 +93,7 @@ function Home(props) {
     }, [filter])
     return (
         <div className='main-container'>
-            <Sidebar onClickPitchType={handleClickPitch} onClickPrice={handleClickPrice} />
+            <Sidebar pitchTypeId={filter?.pitchTypeId} costMin={filter?.costMin} onClickPitchType={handleClickPitch} onClickPrice={handleClickPrice} />
             < div className="container mf-30 p-0" >
                 <Search onFilterSubmit={handleFilterSubmit} />
                 {pitchs.map(p => (

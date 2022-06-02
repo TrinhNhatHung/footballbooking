@@ -30,6 +30,7 @@ function Header(props) {
         localStorage.removeItem('role')
         localStorage.removeItem('token')
         localStorage.removeItem('fullname')
+        localStorage.removeItem('infor')
     }
 
     return (
@@ -42,7 +43,8 @@ function Header(props) {
                                 <div className="col-lg-12">
                                     <div className="navbar-header">
                                         <button className="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span className="icon-bar" /><span className="icon-bar" /><span className="icon-bar" /></button>
-                                        <a href="#" className="navbar-brand">FOOTBALL BOOKING</a>
+                                        {/* <a href="#" className="navbar-brand">FOOTBALL BOOKING</a> */}
+                                        <Link to="/" className="navbar-brand">FOOTBALL BOOKING</Link>
                                     </div>
                                     <div className="navbar-collapse collapse" id="mobile_menu">
                                         <ul className="nav navbar-nav">
@@ -66,7 +68,7 @@ function Header(props) {
 
                                             }
 
-                                            <li><a href="#"><span className="glyphicon glyphicon-user" /> Profile</a></li>
+                                            <li><Link to="/profile"><span className="glyphicon glyphicon-user" /> Profile</Link></li>
                                             <li><a href="#" className="dropdown-toggle" data-toggle="dropdown"><span className="glyphicon glyphicon-log-in" /> Login / Sign Up
                                                 {(localStorage.getItem('fullname') !== null) ? ` (${localStorage.getItem('fullname')})` : ''}
                                                 <span className="caret" /></a>

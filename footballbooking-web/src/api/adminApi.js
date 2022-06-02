@@ -5,16 +5,23 @@ import queryString from 'query-string';
 
 
 const adminApi = {
-    getListUsers: () => {
+    getListUsers: (filter) => {
         var data = new FormData();
+        data.append("searchByNameOrPhone", filter.searchByNameOrPhone);
+        data.append("limit", filter.limit);
+        data.append("roleId", filter.roleId);
+        data.append("page", filter.page);
+        console.log("FILTER")
+        console.log(filter)
         var config = {
             url: "/userservice/getAllUser",
-            method: "GET",
-            data,
+            method: "POST",
+
             headers: {
                 "Authorization": localStorage.getItem("token"),
                 ...data.getHeaders,
             },
+            data,
         };
 
         return axiosClientPost(config)

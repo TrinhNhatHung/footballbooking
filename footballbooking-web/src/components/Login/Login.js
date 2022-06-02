@@ -59,10 +59,12 @@ const Link = styled.a`
 `;
 
 Login.propTypes = {
+    check: PropTypes.bool,
     onClickLogin: PropTypes.func
 };
 
 Login.defaultProps = {
+    check: true,
     onClickLogin: null
 };
 
@@ -70,7 +72,7 @@ Login.defaultProps = {
 
 function Login(props) {
     const [input, setInput] = useState({})
-    const { onClickLogin } = props
+    const { check, onClickLogin } = props
     function handleOnChange(e) {
         const inputcur = input
         setInput({
@@ -90,7 +92,8 @@ function Login(props) {
                 <Title>SIGN IN</Title>
                 <Form>
                     <Input placeholder="phone" name="phone" onChange={handleOnChange} value={input.username} />
-                    <Input placeholder="password" name="password" onChange={handleOnChange} value={input.password} />
+                    <Input placeholder="password" name="password" type={"password"} onChange={handleOnChange} value={input.password} />
+                    {check ? "" : <span style={{ color: "red", textAlign: "left" }}>Sai tài khoản hoặc mật khẩu</span>}
                     <Button onClick={handleClickLogin}>LOGIN</Button>
                     <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
                     <Link>CREATE A NEW ACCOUNT</Link>

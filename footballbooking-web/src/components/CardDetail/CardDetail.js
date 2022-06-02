@@ -249,10 +249,11 @@ function CardDetail(props) {
 
                         <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 card-image">
                             <div className=''>
-                                <img className='card-image-link' src='https://thegioithethao.vn/upload_images/images/2021/01/31/san-bong-da-osaka-img1.jpg' />
+                                {console.log(pitchDetail.coverAvatar)}
+                                <img className='card-image-link' src='https://giaydabonghana.com/wp-content/uploads/2020/08/Giai-bong-phui-la-gi.jpg' />
                             </div>
                             <div>
-                                <h1>Sân Chuyên Việt</h1>
+                                <h1>{pitchDetail.name}</h1>
                             </div>
                         </div>
                     </div>
@@ -263,7 +264,7 @@ function CardDetail(props) {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Thông tin đặt sân(Sân Chuyên Việt)</h5>
+                            <h5 className="modal-title" id="exampleModalLabel">Thông tin đặt sân ( {pitchDetail.name} )</h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

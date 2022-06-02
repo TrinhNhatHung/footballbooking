@@ -13,7 +13,9 @@ function ListUser(props) {
 
     const [filter, setFilter] = useState({
         page: 1,
-        limit: 10
+        limit: 4,
+        searchByNameOrPhone: "",
+        roleId: 1,
     })
 
     const [checkLock, setCheckLock] = useState(true)
@@ -22,11 +24,11 @@ function ListUser(props) {
 
     function handleSearch(formValues) {
         const filterNew = filter
-        const searhByNameOrPhone = formValues.searchTerm
+        const searchByNameOrPhone = formValues.searchTerm
         setFilter({
             ...filterNew,
             page: 1,
-            searhByNameOrPhone,
+            searchByNameOrPhone
         })
     }
 
@@ -62,18 +64,18 @@ function ListUser(props) {
 
     function handleChangeRole(e) {
         const filterNew = filter
-        const role = e.target.value
+        const roleId = e.target.value
         setFilter({
             ...filterNew,
-            role
+            roleId
         })
     }
 
     useEffect(() => {
         const fetchUserssList = async () => {
             const response = await adminApi.getListUsers(filter);
-            setUsers(response.data)
-            console.log(response.data)
+            setUsers(response.data.users)
+            console.log(response.data.users)
         }
         console.log(filter)
         fetchUserssList();
@@ -91,8 +93,8 @@ function ListUser(props) {
                     </div>
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                         <select className='select' value={filter.role} onChange={handleChangeRole}>
-                            <option value="ROLE_OWNER">Chủ sân</option>
-                            <option value="ROLE_CUSTOMER">Người dùng</option>
+                            <option value="1">Chủ sân</option>
+                            <option value="2">Người dùng</option>
                         </select>
                     </div>
                 </div>
