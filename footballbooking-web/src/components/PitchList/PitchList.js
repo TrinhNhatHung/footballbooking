@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Table } from "react-bootstrap";
 import "../PitchReq/pitchrequest.css";
+import axiosClientPost from "../../api/axiosClientPost";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -15,7 +17,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
 
 const Title = styled.h1`
@@ -34,42 +35,55 @@ const Menu = styled.span`
   display: flex;
   cursor: pointer;
   padding-bottom: 20px;
-`;
-
-const Tbody = styled.tbody`
-  background-color: #f7f5f2;
+  justify-content: space-between;
 `;
 
 const Action = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
-const Add = styled.button`
-    background-color: rgb(54, 131, 64);
-  color: white;
-  border-radius: 5px;
-  padding: 5px;
-  border: none;
-  `;
-
-const Cancel = styled.button`
-background-color: #ff6363;
-color: white;
-border-radius: 5px;
-padding: 5px 15px 5px 15px;
-border: none;
+  display: flex;
+  flex-direction: column;
 `;
 
 const PitchList = () => {
+  const navigate = useNavigate();
+  const [pitchList, setPitchList] = useState([]);
+  const getPitchList = async () => {
+    var data = new FormData();
+    var config = {
+      url: "/pitchservice/getMyPitch",
+      method: "GET",
+      data,
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        ...data.getHeaders,
+      },
+    };
+
+    axiosClientPost(config)
+      .then((response) => {
+        setPitchList(response.data);
+      })
+      .catch(() => {
+        navigate("/login");
+      });
+  };
+  useEffect(() => {
+    getPitchList();
+  }, []);
+
+  const createNewPitch = ()=> {
+    navigate("/pitchowner/createNewPitch");
+  }
   return (
     <div>
       <Container>
-        <Title style={{ marginBottom: "100px" }}>XỬ LÝ ĐẶT SÂN</Title>
+        <Title style={{ marginBottom: "10px", marginTop: "65px" }}>XỬ LÝ ĐẶT SÂN</Title>
         <Wrapper>
           <Menu>
-            <a style={{ marginRight: "30px" }}>Yêu cầu đặt sân</a>
-            <a>Danh sách sân</a>
+            <div>
+              <a style={{ marginRight: "30px" }}>Yêu cầu đặt sân</a>
+              <a>Danh sách sân</a>
+            </div>
+            <button onClick={createNewPitch} className="btn btn-success">Tạo sân mới</button>
           </Menu>
           <Table className="list">
             <thead>
@@ -81,27 +95,32 @@ const PitchList = () => {
                 <th>Tác vụ</th>
               </tr>
             </thead>
-            <Tbody>
-              <tr>
-                <td>1</td>
-                <td>Bóng đá</td>
-                <td>
-                  Sân Chuyên Việt <br />
-                  Địa chỉ <br /> 09111111 <br />
-                  tronaugust@gmail.com
-                </td>
-                <td>
-                  <img></img>
-                </td>
-                <td>
-                  <Action>
-                    <Add style={{ marginBottom: "10px" }}>Đặt sân</Add>
-                    <Add style={{ marginBottom: "10px" }}>Sửa thông tin</Add>
-                    <Cancel>Xoá</Cancel>
-                  </Action>
-                </td>
-              </tr>
-            </Tbody>
+            <tbody>
+              {pitchList.map((pitch, index) => {
+                return (
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>Bóng đá</td>
+                    <td>
+                      {pitch.name} <br />
+                      {`${pitch.address.number} ${pitch.address.street}, ${pitch.address.commune}, ${pitch.address.district}, ${pitch.address.city}`}
+                    </td>
+                    <td>
+                      <img style={{width : 120, height: 120}} src={pitch.coverAvatarLink}></img>
+                    </td>
+                    <td>
+                      <Action>
+                        <button style={{marginBottom :5}} className="btn btn-success">Thêm sân thành phần</button>
+                        <button style={{marginBottom :5}} className="btn btn-success">
+                          Sửa thông tin
+                        </button>
+                        <button style={{marginBottom :5}} className="btn btn-danger">Xóa</button>
+                      </Action>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </Table>
         </Wrapper>
       </Container>

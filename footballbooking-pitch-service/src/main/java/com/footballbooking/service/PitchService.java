@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.footballbooking.dao.PitchDao;
 import com.footballbooking.entity.Pitch;
@@ -39,4 +40,10 @@ public class PitchService {
 	public List<Pitch> getByUserId (Integer userId){
 		return pitchDao.getByUserId(userId);
 	}
+
+	@Transactional
+	public void insert (Pitch pitch) {
+		pitchDao.insert(pitch);
+	}
+	
 }

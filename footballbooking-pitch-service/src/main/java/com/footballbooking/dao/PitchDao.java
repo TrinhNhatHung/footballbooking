@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.footballbooking.entity.Pitch;
@@ -13,6 +14,9 @@ import com.footballbooking.entity.PitchDetail;
 
 @Repository
 public class PitchDao extends EntityDao<Pitch> {
+	
+	@Autowired
+	private AddressDao addressDao;
 	
 	public List<Pitch> getAll(){
 		return super.getAll(Pitch.class);
@@ -72,5 +76,10 @@ public class PitchDao extends EntityDao<Pitch> {
 		NativeQuery<Pitch> query = openSession().createNativeQuery(sql, Pitch.class)
 										.setParameter("userId", userId);
 		return query.getResultList();
+	}
+	
+	public void insert (Pitch pitch) {
+		addressDao.insert(pitch.getAddress());
+		super.insert(pitch);
 	}
 }

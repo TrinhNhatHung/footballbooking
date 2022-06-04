@@ -18,7 +18,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
 
 const Title = styled.h1`
@@ -37,10 +36,6 @@ const Menu = styled.span`
   display: flex;
   cursor: pointer;
   padding-bottom: 20px;
-`;
-
-const Tbody = styled.tbody`
-  background-color: #f7f5f2;
 `;
 
 const PitchRequest = () => {
@@ -113,7 +108,7 @@ const PitchRequest = () => {
   return (
     <div>
       <Container>
-        <Title style={{ marginBottom: "100px" }}>XỬ LÝ ĐẶT SÂN</Title>
+        <Title style={{ marginBottom: "10px", marginTop: "80px" }}>XỬ LÝ ĐẶT SÂN</Title>
         <Wrapper>
           <Menu>
             <a style={{ marginRight: "30px" }}>Yêu cầu đặt sân</a>
@@ -131,7 +126,7 @@ const PitchRequest = () => {
                 <th>Tác vụ</th>
               </tr>
             </thead>
-            <Tbody>
+            <tbody>
               {listRequest.map((request, index) => {
                 return (
                   <tr>
@@ -150,7 +145,7 @@ const PitchRequest = () => {
                   </tr>
                 );
               })}
-            </Tbody>
+            </tbody>
           </Table>
         </Wrapper>
       </Container>
