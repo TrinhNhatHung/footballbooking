@@ -1,0 +1,19 @@
+.formNewPitch {
+    margin-top: 100px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.col {
+    width: 90%;
+    margin: 0px 50px;
+    text-align: left;
+}
+
+.btn {
+    margin: 5px 10px;
+}

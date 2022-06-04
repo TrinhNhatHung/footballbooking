@@ -14,9 +14,34 @@ Header.defaultProps = {
 };
 
 function Header(props) {
-    const [bookingOrder, setBookingOrder] = useState('/login')
-    const { status } = props
-    const navigate = useNavigate()
+    const [bookingOrder, setBookingOrder] = useState('/login');
+    const { status } = props;
+    const navigate = useNavigate();
+    const roleUser = localStorage.getItem("role");
+
+    const navLink = ()=> {
+        if (roleUser === null || roleUser === undefined || roleUser === "ROLE_CUSTOMER"){
+            return <ul className="nav navbar-nav">
+                <li className=""><Link to="/">Home</Link></li>
+            </ul>
+        }
+
+        if (roleUser === "ROLE_PITCHOWNER"){
+            return <ul className="nav navbar-nav">
+                <li className=""><Link to="/pitchowner/booking">DS yêu cầu đặt sân</Link></li>
+            </ul>
+        }
+    }
+
+    const homeLink =  ()=> {
+        if (roleUser === null || roleUser === undefined || roleUser === "ROLE_CUSTOMER"){
+            return <a href="/" className="navbar-brand">FOOTBALL BOOKING</a>
+        }
+
+        if (roleUser === "ROLE_PITCHOWNER"){
+            return <a href="/pitchowner/pitchList" className="navbar-brand">Sân bóng của tôi</a>
+        }
+    }
 
     function handleClickBookingOrder() {
         if (localStorage.getItem('token') !== null) {
@@ -42,18 +67,16 @@ function Header(props) {
                                 <div className="col-lg-12">
                                     <div className="navbar-header">
                                         <button className="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span className="icon-bar" /><span className="icon-bar" /><span className="icon-bar" /></button>
-                                        <a href="#" className="navbar-brand">FOOTBALL BOOKING</a>
+                                        {homeLink()}
                                     </div>
                                     <div className="navbar-collapse collapse" id="mobile_menu">
-                                        <ul className="nav navbar-nav">
-                                            <li className=""><Link to="/">Home</Link></li>
-                                            <li><a href="#">Welcome</a></li>
-                                        </ul>
+                                        {
+                                            navLink()
+                                        }
                                         <ul className="nav navbar-nav navbar-right">
 
-                                            {(localStorage.getItem('role') === 'ROLE_PITCHOWNER')
-                                                ? <li><span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Chủ sân</span></li>
-                                                : ((localStorage.getItem('role') === 'ROLE_ADMIN')
+                                            {
+                                                (localStorage.getItem('role') === 'ROLE_ADMIN')
                                                     ? <li><a href="#" className="dropdown-toggle" data-toggle="dropdown"> Admin <span className="caret" /></a>
                                                         <ul className="dropdown-menu">
                                                             <li><Link to="./list-user">Danh sách người dùng</Link></li>
@@ -62,8 +85,6 @@ function Header(props) {
                                                     </li>
                                                     : <li> <span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Sân đặt</span>
                                                     </li>
-                                                )
-
                                             }
 
                                             <li><a href="#"><span className="glyphicon glyphicon-user" /> Profile</a></li>

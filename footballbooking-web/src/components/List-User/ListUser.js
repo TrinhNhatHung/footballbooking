@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import Search from '../Search/Search';
 import './listUser.css'
 import Pagination from '../Paganation/Pagination';
