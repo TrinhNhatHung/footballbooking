@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 				.antMatchers("/getRequestBookingList", "/acceptBookingRequest","/rejectBookingRequest","/cancelBookingRequest").hasRole("PITCHOWNER")
-				.antMatchers("/book", "/getMyBooking","/acceptBookingRequest","/rejectBookingRequest","/cancelBookingRequest").hasRole("CUSTOMER")
+				.antMatchers("/book", "/getMyBooking","/cancelBookingRequest").hasRole("CUSTOMER")
 				.antMatchers("/**").permitAll()
 				.anyRequest().authenticated();
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

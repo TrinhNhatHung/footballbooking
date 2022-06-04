@@ -14,9 +14,9 @@ import pitchItem from '../components/pitchItem';
 
 const Home = ({ navigation }) => {
   // const apiURL = 'http://localhost:8080/pitchservice/pitchs';
-  const apiURL = 'http://192.168.1.9:8080/pitchservice/pitchs';
+  const apiURL = 'http://172.14.0.3:8080/pitchservice/pitchs';
 
-  const [pitchs, setpitchs] = useState([]);
+  const [pitchs, setpitchs] = useState();
   const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +38,13 @@ const Home = ({ navigation }) => {
         console.log('Error: ', error);
       }).finally(() => setisLoading(false))
   }
-
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#368340'></StatusBar>
@@ -63,14 +69,20 @@ const Home = ({ navigation }) => {
           <PitchItem navigation={navigation}></PitchItem>
           <PitchItem navigation={navigation}></PitchItem>
         </View> */}
-      {isLoading ? <ActivityIndicator /> : (
+      {/* {isLoading ? <ActivityIndicator /> : (
         <FlatList
           contentContainerStyle={styles.listContainer}
           data={pitchs}
           renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
           keyExtractor={(item) => item.pitchId}
         />
-      )}
+      )} */}
+      <FlatList
+          contentContainerStyle={styles.listContainer}
+          data={pitchs}
+          renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
+          keyExtractor={(item) => item.pitchId}
+        />
     </View>
   )
 }

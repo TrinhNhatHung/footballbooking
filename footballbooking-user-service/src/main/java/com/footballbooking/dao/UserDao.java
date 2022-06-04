@@ -22,6 +22,31 @@ public class UserDao extends EntityDao<User> {
 	public void insert(User user) {
 		super.insert(user);
 	}
+	
+	public void update (User user) {
+		String sql = "UPDATE user SET fullname = :fullname, email = :email, password = :password WHERE user_id = :userId";
+		NativeQuery<User> query = getCurrentSession().createNativeQuery(sql, User.class);
+		User currentUser = getById(user.getUserId());
+		if (user.getFullname() == null) {
+			query.setParameter("fullname", currentUser.getFullname());
+		} else {
+			query.setParameter("fullname", user.getFullname());
+		}
+		
+		if (user.getEmail() == null) {
+			query.setParameter("email", currentUser.getEmail());
+		} else {
+			query.setParameter("email", user.getEmail());
+		}
+		
+		if (user.getPassword() == null) {
+			query.setParameter("password", currentUser.getPassword());
+		} else {
+			query.setParameter("password", user.getPassword());
+		}
+		query.setParameter("userId", user.getUserId());
+		query.executeUpdate();
+	}
 
 	public User getById(Integer userId) {
 		return super.getById(User.class, userId);

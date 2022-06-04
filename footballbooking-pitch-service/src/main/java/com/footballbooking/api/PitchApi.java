@@ -11,12 +11,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.footballbooking.constant.MessageConst;
+import com.footballbooking.entity.Address;
 import com.footballbooking.entity.Pitch;
 import com.footballbooking.response.PitchResponse;
 import com.footballbooking.service.PitchService;
@@ -84,5 +86,41 @@ public class PitchApi {
 		
 		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
     }
+	
+	@PostMapping("/addNewPitch")
+	public ResponseEntity<?> addNewPitch (@RequestParam(name = "name") String pitchName,
+					@RequestParam(name = "description") String description,
+					@RequestParam(name = "city") String city,
+					@RequestParam(name = "district") String district,
+					@RequestParam(name = "commune") String commune,
+					@RequestParam(name = "street") String street){
+		Map<String, Object> result = new HashMap<String, Object>();
+		Pitch pitch = new Pitch();
+		String userIdStr = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Integer ownerId = null;
+		try {
+			ownerId = Integer.parseInt(userIdStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		pitch.setOwnerId(ownerId);
+		pitch.setName(pitchName);
+		pitch.setDescription(description);
+		Address address = new Address();
+		address.setCity(city);
+		address.setCommune(commune);
+		address.setDistrict(district);
+		address.setStreet(street);
+		pitch.setAddress(address);
+		try {
+			pitchService.insert(pitch);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		
+		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
+	}
 	
 }

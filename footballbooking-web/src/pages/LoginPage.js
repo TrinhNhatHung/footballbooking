@@ -30,16 +30,15 @@ function LoginPage(props) {
                     localStorage.setItem('fullname', response.data.fullName)
                     localStorage.setItem('infor', JSON.stringify(response.data));
                     setCheck(true)
-                    navigate('/')
-                } else {
-                    console.log("ERROR")
-                    setCheck(false)
+                    if (response.data.role === "ROLE_CUSTOMER"){
+                        navigate('/');
+                    } else if(response.data.role === "ROLE_PITCHOWNER"){
+                        navigate('/pitchowner/booking');
+                    } else {
+                        console.log("ERROR")
+                        setCheck(false)
+                    }
                 }
-            } else {
-                setCheck(false)
-            }
-
-        }
         checkLogin()
     }
 
