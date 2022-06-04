@@ -12,6 +12,13 @@ const userApi = {
         const url = 'userservice/signUp'
         var data = queryString.stringify(params);
         return axiosClientPost.post(url, data)
+    },
+
+    updateUser: (params) => {
+        console.log(params)
+        const url = 'userservice/updateProfile'
+        var data = queryString.stringify(params);
+        return axiosClientPost.post(url, data)
     }
 }
 
