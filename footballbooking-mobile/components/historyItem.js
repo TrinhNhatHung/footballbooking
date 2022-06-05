@@ -1,55 +1,108 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { Entypo, FontAwesome, } from '@expo/vector-icons';
 
 import { PitchDetail } from "../screens"
+import axios from 'axios';
+import moment from 'moment';
+import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 
-export default function pitchItem( props ) {
+export default function historyItem(props) {
     // const { pitch } = props.pitch
     // console.log(pitch)
     // const { navigation } = props.navigation
-    const {pitch,navigation} = props
+    const { pitch, token } = props
+    const [status, setStatus] = useState(pitch.status)
     // const {pitch} = props
     // console.log(pitch)
+    const apiURL = 'http://192.168.1.5:8080/';
+    const cancelBookingHandle = (token, bookingId) => {
+        // console.log(bookingId + "...." +token)
+        if ( pitch.time.slice(0,10) == moment().format('DD/MM/YYYY').toString()){
+            if(pitch.time.slice(11,16) < moment().add(20, 'minutes').format('hh:mm').toString()){}
+        }
+        console.log(pitch.time.slice(11,16) + "....+..." > moment().add(20, 'minutes').format('HH:mm').toString())
+        axios.post(`${apiURL}bookingservice/cancelBookingRequest`, {
+            bookingId: String(bookingId),
+        }, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                console.log(response.data.success)
+                return response
+            })
+            .then((response => {
+                // userAuthen = response.data.data.isAuthen
+                // setPostBooking(response.data.success)
+                // console.log(postBooking)
+                setStatus('Đã huỷ')
+                if (!response.data.success) {
+                    Alert.alert('Cancel booking failed', 'Please try again!', [
+                        { text: 'Okay' }
+                    ]);
+                    // setHourStart({
+                    //   hourStart: hourStart.hourStart,
+                    //   miniPitchId: hourStart.miniPitchId.splice(hourStart.miniPitchId.indexOf('miniPitchId'),1),
+                    //   modalVisible: !hourStart.modalVisible
+                    // })
+                    return;
+                }
+                Alert.alert('Success', 'Your booking has been cancel', [
+                    { text: 'Okay' }
+                ]);
+                // hourStart.miniPitchId.splice(hourStart.miniPitchId.indexOf(miniPitchId), 1)
+                // setHourStart({
+                //     hourStart: hourStart.hourStart,
+                //     miniPitchId: hourStart.miniPitchId,
+                //     modalVisible: !hourStart.modalVisible
+                // })
+                // console.log(hourStart.miniPitchId)
+            }))
+            .catch(error => console.log(error));
+    }
+
     return (
         <View style={styles.container}>
-            <View style={{ flexDirection: 'row', flex: 1 }} >
+            {/* <View style={{ flexDirection: 'row', flex: 1 }} >
                 <View style={{ margin: 5 }}>
                     <FontAwesome name="soccer-ball-o" size={24} color="green" />
                 </View>
                 <Text style={styles.pitchName}>{pitch.name}</Text>
-            </View>
+            </View> */}
             {/* <Text style={styles.pitchName}>Sân Chuyên Việt</Text> */}
-            <View style={{ flexDirection: 'row', flex: 1 }} >
+            {/* <View style={{ flexDirection: 'row', flex: 1 }} >
                 <View style={{ margin: 5 }}>
                     <Entypo name="location-pin" size={24} color="green" />
                 </View>
                 <Text style={styles.pitchAddress}>{pitch.address.number} - {pitch.address.street}, {pitch.address.commune}, {pitch.address.district}, {pitch.address.city}</Text>
-            </View>
+            </View> */}
             {/* <Text style={styles.pitchAddress}>11 Thích Quảng Đức, Hòa Khánh, Liên Chiểu, Đà Nẵng</Text> */}
             <View style={styles.infoContainer}>
                 <Image
                     style={styles.tinyLogo}
                     source={{
-                        uri: pitch.coverAvatarLink,
+                        uri: 'https://reactnative.dev/img/tiny_logo.png',
                     }}
                 />
                 <View style={styles.text}>
 
-                    <Text style={styles.pitchDetailName}>Sân 5</Text>
+                    <Text style={styles.pitchDetailName}>{pitch.pitchName}</Text>
                     <View style={styles.timePrice}>
-                        <Text style={styles.time}>5:00 - 16:00</Text>
-                        <Text style={styles.price}>180.000VNĐ</Text>
+                        <Text style={styles.time}>{pitch.pitchTypeName}</Text>
+                        <Text style={styles.price}>{pitch.cost} VNĐ/h</Text>
                     </View>
                     <View style={styles.timePrice}>
-                        <Text style={styles.time}>17:00 - 22:00</Text>
-                        <Text style={styles.price}>220.000VNĐ</Text>
+                        <Text style={styles.time}>Thời gian:</Text>
+                        <Text style={styles.price}>{pitch.time}</Text>
                     </View>
 
                     <View style={styles.phone}>
-                        <Text style={styles.phoneNumberTittle}>Số điện thoại:</Text>
-                        <Text style={styles.phoneNumber}>0356112087</Text>
+                        <Text style={styles.phoneNumberTittle}>Tình trạng:</Text>
+                        <Text style={styles.phoneNumber}>{status}</Text>
                     </View>
                     {/* <View style={{ flexDirection: 'row', flex: 1 }} >
                         <Entypo name="location-pin" size={24} color="green" />
@@ -62,15 +115,24 @@ export default function pitchItem( props ) {
 
                 </View>
             </View>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate("PitchDetail",{
-                    pitch: pitch,
-                })}>
-                <Text style={styles.textButton}>
-                    Chi tiết
-                </Text>
-            </TouchableOpacity>
+            {(status == 'Đã huỷ') ?
+                <TouchableOpacity
+                    style={[styles.button,{
+                        backgroundColor: 'red'
+                    }]}
+                    >
+                    <Text style={styles.textButton}>
+                        Đã huỷ
+                    </Text>
+                </TouchableOpacity> :
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => cancelBookingHandle(token.userToken,pitch.bookingId)}>
+                    <Text style={styles.textButton}>
+                        Huỷ đặt sân
+                    </Text>
+                </TouchableOpacity>
+            }
         </View>
     )
 }

@@ -14,7 +14,7 @@ import pitchItem from '../components/pitchItem';
 
 const Home = ({ navigation }) => {
   // const apiURL = 'http://localhost:8080/pitchservice/pitchs';
-  const apiURL = 'http://172.14.0.3:8080/pitchservice/pitchs';
+  const apiURL = 'http://192.168.1.5:8080/pitchservice/pitchs';
 
   const [pitchs, setpitchs] = useState();
   const [isLoading, setisLoading] = useState(true);
@@ -41,50 +41,52 @@ const Home = ({ navigation }) => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" animating color={'green'}/>
       </View>
     );
-  }
-  return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor='#368340'></StatusBar>
-      <View style={styles.headerContainer}>
-        <Search></Search>
-      </View>
-
-
-      <View style={{
-        marginTop: 10,
-        marginLeft: 10,
-      }}>
-        <Text style={styles.result}>Kết quả</Text>
-      </View>
-      {/* <View style={styles.listContainer}>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-          <PitchItem navigation={navigation}></PitchItem>
-        </View> */}
-      {/* {isLoading ? <ActivityIndicator /> : (
+  } else{
+    return (
+      <View style={styles.container}>
+        <StatusBar backgroundColor='#368340'></StatusBar>
+        <View style={styles.headerContainer}>
+          <Search></Search>
+        </View>
+  
+  
+        <View style={{
+          marginTop: 10,
+          marginLeft: 10,
+        }}>
+          <Text style={styles.result}>Kết quả</Text>
+        </View>
+        {/* <View style={styles.listContainer}>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+            <PitchItem navigation={navigation}></PitchItem>
+          </View> */}
+        {/* {isLoading ? <ActivityIndicator /> : (
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            data={pitchs}
+            renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
+            keyExtractor={(item) => item.pitchId}
+          />
+        )} */}
         <FlatList
-          contentContainerStyle={styles.listContainer}
-          data={pitchs}
-          renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
-          keyExtractor={(item) => item.pitchId}
-        />
-      )} */}
-      <FlatList
-          contentContainerStyle={styles.listContainer}
-          data={pitchs}
-          renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
-          keyExtractor={(item) => item.pitchId}
-        />
-    </View>
-  )
+            contentContainerStyle={styles.listContainer}
+            data={pitchs}
+            renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
+            keyExtractor={(item) => item.pitchId}
+          />
+      </View>
+    )
+
+  }
 }
 
 export default Home
