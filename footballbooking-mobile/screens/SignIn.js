@@ -24,7 +24,7 @@ import {useStateWithCallbackLazy} from 'use-state-with-callback';
 // import Users from '../model/users';
 
 const SignIn = ({ navigation }) => {
-    const apiURL = 'http://172.14.0.3:8080/';
+    const apiURL = 'http:/192.168.1.5:8080/';
     const [foundUser, setfoundUser] = useState({
         "isAuthen": false,
     });
@@ -177,7 +177,7 @@ const SignIn = ({ navigation }) => {
             .then((response => {
                 // userAuthen = response.data.data.isAuthen
                 setfoundUser(response.data.data)
-                console.log(foundUser)
+                // console.log(response.data.data)
                 if (!response.data.data.isAuthen) {
                   Alert.alert('Invalid User!', 'Username or password is incorrect.', [
                       { text: 'Okay' }

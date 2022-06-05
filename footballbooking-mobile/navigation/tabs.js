@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, MaterialIcons, Fontisto } from '@expo/vector-icons';
 import Svg, { Path } from 'react-native-svg';
 
 import { Home } from "../screens"
-import { Favorite } from "../screens"
+import { History } from "../screens"
 import { Profile } from "../screens"
 
 const Tab = createBottomTabNavigator();
@@ -93,11 +93,11 @@ const Tabs = () => {
               )
             }} />
           <Tab.Screen
-            name="FavoriteTab"
-            component={Favorite}
+            name="HistoryTab"
+            component={History}
             options={{
               tabBarLabel: '',
-              tabBarIcon: ({color}) => <MaterialIcons name="favorite" size={30} color={color} />,
+              tabBarIcon: ({color}) => <Fontisto name="bookmark-alt" size={30} color={color} />,
               tabBarButton: (props) => (
                   <TabBarCustomButton
                       {...props}

@@ -15,7 +15,7 @@ import TimeSlot from '../components/timeSlot';
 import anhSanBong from '../assets/images/sanbong.jpg'
 
 const PitchDetail = ({ route, navigation }) => {
-  const apiURL = 'http://172.14.0.3:8080/';
+  const apiURL = 'http://192.168.1.5:8080/';
   const { pitch } = route.params
   const [showCalender, setShowCalender] = useState(false);
   const [pitchTypeId, setPitchTypeId] = useState('1');
@@ -40,6 +40,7 @@ const PitchDetail = ({ route, navigation }) => {
 
   arrayA = []
   arrayTemp = []
+  arrayData = []
   count = 0;
 
   // const [modalVisible, setModalVisible] = useState(false);
@@ -94,12 +95,20 @@ const PitchDetail = ({ route, navigation }) => {
 
           // console.log(element.timeStart)
         }
-        console.log(arrayTemp)
+
+        // console.log(arrayTemp[0].timeStart.slice(0,2))
+        // console.log(moment().add(10, 'minutes').format('hh:mm'))
+        if ( bookingDate == moment().format('YYYY/MM/DD').toString()){
+          arrayData = arrayTemp.filter(function(data) {
+            // console.log(data.timeStart.slice(0,2) > moment().add(10, 'minutes').format('hh').toString())
+            return data.timeStart.slice(0,2) > moment().add(10, 'minutes').format('HH').toString();
+          });
+        } else arrayData = arrayTemp;
         // console.log(arrayFreeTime)
       })
       setFreeTime({
         loading: false,
-        data: arrayTemp,
+        data: arrayData,
         pitchTypeId: pitchTypeId
       })
       // setIsLoadingFreeTime({ isLoadingFreeTime: false })

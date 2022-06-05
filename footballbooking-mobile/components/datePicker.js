@@ -53,6 +53,7 @@ const datePicker = (props) => {
 
                     is24Hour={true}
                     onChange={onChange}
+                    minimumDate={Date.now()}
                 />
             )}
         </View>
