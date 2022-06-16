@@ -20,11 +20,12 @@ import { useTheme } from 'react-native-paper';
 
 import { AuthContext } from '../components/context';
 
-import {useStateWithCallbackLazy} from 'use-state-with-callback';
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
 // import Users from '../model/users';
+import { apiURL } from '../api/config';
 
 const SignIn = ({ navigation }) => {
-    const apiURL = 'http:/192.168.1.5:8080/';
+    // const apiURL = 'http:/192.168.1.5:8080/';
     const [foundUser, setfoundUser] = useState({
         "isAuthen": false,
     });
@@ -97,69 +98,6 @@ const SignIn = ({ navigation }) => {
     }
 
     const loginHandle = (userName, password) => {
-
-        // const foundUser = Users.filter( item => {
-        //     return userName == item.username && password == item.password;
-        // } );
-
-        // if ( data.username.length == 0 || data.password.length == 0 ) {
-        //     Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
-        //         {text: 'Okay'}
-        //     ]);
-        //     return;
-        // }
-
-
-        // fetch("http://192.168.10.175:8080/userservice/checkLogin", {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         phone: userName,
-        //         password: password
-        //     }),
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data'
-        //     }
-        // })
-        //     .then(res => {
-        //         if (!res.ok) throw Error(res.statusText);
-        //         return res.json();
-        //     })
-        //     .then(data => {
-        //         //console.log(data)
-        //         setfoundUser(data.data)
-        //         console.log(foundUser)
-        //         if (!foundUser.isAuthen) {
-        //             Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-        //                 { text: 'Okay' }
-        //             ]);
-        //             return;
-        //         }
-        //     })
-        //     .catch(error => console.log(error));
-        // try {
-        //     const res = await axios.post("http://192.168.10.175:8080/userservice/checkLogin", {
-        //         phone: String(userName),
-        //         password: String(password)
-        //         // phone: userName,
-        //         // password: password
-        //     }, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     })
-        //     setfoundUser(res.data.data)
-        //     console.log(foundUser)
-        // } catch (error) {
-        //     console.log(error.message)
-        // }
-        // console.log(userName+" + "+password)
-        // if (!foundUser.isAuthen) {
-        //     Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-        //         { text: 'Okay' }
-        //     ]);
-        //     return;
-        // }
-        // var userAuthen = "";
         axios.post(`${apiURL}userservice/checkLogin`, {
             phone: String(userName),
             password: String(password)
@@ -178,18 +116,18 @@ const SignIn = ({ navigation }) => {
                 // userAuthen = response.data.data.isAuthen
                 setfoundUser(response.data.data)
                 // console.log(response.data.data)
-                if (!response.data.data.isAuthen) {
-                  Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-                      { text: 'Okay' }
-                  ]);
-                  return;
-              }
-              signIn(response.data.data)
+                if (!response.data.success) {
+                    Alert.alert('Invalid User!', 'Username or password is incorrect.', [
+                        { text: 'Okay' }
+                    ]);
+                    return;
+                }
+                signIn(response.data.data, String(password))
             }))
             .catch(error => console.log(error));
         // console.log(userName+" + "+password)
         // setTimeout(async () => {
-            
+
         //   }, 2000);
         // signIn(foundUser);
     }

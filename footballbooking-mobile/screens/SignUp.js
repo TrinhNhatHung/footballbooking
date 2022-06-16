@@ -22,9 +22,10 @@ import axios from 'axios';
 import { useTheme } from 'react-native-paper';
 
 // import { AuthContext } from '../components/context';
+import { apiURL } from '../api/config';
 
 const SignUp = ({ navigation }) => {
-    const apiURL = 'http://192.168.1.5:8080/';
+    // const apiURL = 'http://192.168.1.5:8080/';
     const [signUpUser, setsignUpUser] = React.useState({
         "success": true,
     });

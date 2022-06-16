@@ -58,14 +58,15 @@ export default function App() {
   const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
 
   const authContext = React.useMemo(() => ({
-    signIn: async (foundUser) => {
+    signIn: async (foundUser, password) => {
       // setUserToken('fgkj');
       // setIsLoading(false);
       const userToken = String(foundUser.token);
       ////const userName = foundUser.username;
       // 4/ ~ code mẫu
       try {
-        await AsyncStorage.setItem('userToken', userToken);
+        // await AsyncStorage.setItem('userToken', userToken);
+        await AsyncStorage.multiSet([['userToken', userToken], ['userId', String(foundUser.userId)], ['password', password]]);
       } catch (e) {
         console.log(e);
       }
@@ -132,11 +133,17 @@ export default function App() {
           >
             <Stack.Screen name="Home" component={Tabs} options={{ headerShown: false }} />
             <Stack.Screen name="PitchDetail" component={PitchDetail} options={({ route }) => ({ title: route.params.name })} />
-            <Stack.Screen name="EditProfile" component={EditProfile}  options={{title: "Edit Profile"}}/>
+            <Stack.Screen name="EditProfile" component={EditProfile} options={{
+              title: "CHỈNH SỬA THÔNG TIN", 
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }} />
           </Stack.Navigator>
         )
           :
-          <RootStack/>
+          <RootStack />
         }
 
       </NavigationContainer>

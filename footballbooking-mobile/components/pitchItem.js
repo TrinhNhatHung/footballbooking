@@ -5,11 +5,11 @@ import { Entypo, FontAwesome, } from '@expo/vector-icons';
 import { PitchDetail } from "../screens"
 
 
-export default function pitchItem( props ) {
+export default function pitchItem(props) {
     // const { pitch } = props.pitch
     // console.log(pitch)
     // const { navigation } = props.navigation
-    const {pitch,navigation} = props
+    const { pitch, navigation } = props
     // const {pitch} = props
     // console.log(pitch)
     return (
@@ -37,19 +37,26 @@ export default function pitchItem( props ) {
                 />
                 <View style={styles.text}>
 
-                    <Text style={styles.pitchDetailName}>Sân 5</Text>
-                    <View style={styles.timePrice}>
+                    <Text style={styles.pitchDetailName}>Các loại sân</Text>
+                    {pitch.detail.map(pitchDetail => (
+                        // <TimeSlot time={freeTime.timeStart} parentCallback={getTime} />
+                        <View style={styles.timePrice} key={pitchDetail.pitchTypeId}>
+                            <Text style={styles.time}>{pitchDetail.pitchTypeName}</Text>
+                            <Text style={styles.price}>{(pitchDetail.timeSlots)[0].cost}đ</Text>
+                        </View>
+                    ))}
+                    {/* <View style={styles.timePrice}>
                         <Text style={styles.time}>5:00 - 16:00</Text>
                         <Text style={styles.price}>180.000VNĐ</Text>
                     </View>
                     <View style={styles.timePrice}>
                         <Text style={styles.time}>17:00 - 22:00</Text>
                         <Text style={styles.price}>220.000VNĐ</Text>
-                    </View>
+                    </View> */}
 
                     <View style={styles.phone}>
-                        <Text style={styles.phoneNumberTittle}>Số điện thoại:</Text>
-                        <Text style={styles.phoneNumber}>0356112087</Text>
+                        <Text style={styles.phoneNumberTittle}>Số điện thoại</Text>
+                        <Text style={styles.phoneNumber}>{pitch.owner.phone}</Text>
                     </View>
                     {/* <View style={{ flexDirection: 'row', flex: 1 }} >
                         <Entypo name="location-pin" size={24} color="green" />
@@ -64,7 +71,7 @@ export default function pitchItem( props ) {
             </View>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate("PitchDetail",{
+                onPress={() => navigation.navigate("PitchDetail", {
                     pitch: pitch,
                 })}>
                 <Text style={styles.textButton}>

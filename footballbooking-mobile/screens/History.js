@@ -4,9 +4,12 @@ import Constants from 'expo-constants'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HistoryItem from '../components/historyItem'
+import { apiURL } from '../api/config';
+import { AuthContext } from '../components/context';
 
 const History = (navigation) => {
-    const apiURL = 'http://192.168.1.5:8080/';
+    // const apiURL = 'http://192.168.1.5:8080/';
+    const { signOut } = React.useContext(AuthContext);
 
     const [userToken, setUserToken] = useState('')
     const [myBooking, setMyBooking] = useState({
@@ -36,24 +39,67 @@ const History = (navigation) => {
         callMyBooking(userToken.userToken);
     }, [userToken])
 
-    const callMyBooking = async (token) => {
-        try {
-            setMyBooking({
-                loading: true,
-                // data: [],
+    // const callMyBooking = async (token) => {
+    //     try {
+    //         setMyBooking({
+    //             loading: true,
+    //             // data: [],
+    //         })
+    //         const res = await axios.get(`${apiURL}bookingservice/getMyBooking`,
+    //             {
+    //                 headers: {
+    //                     'Authorization': token,
+    //                     'Content-Type': 'multipart/form-data'
+    //                 }
+    //             });
+    //         setMyBooking({
+    //             loading: false,
+    //             data: res.data.data,
+    //         })
+    //         console.log(res.data.data)
+
+    //         // setIsLoadingFreeTime({ isLoadingFreeTime: false })
+    //         // arrayA = res.data.data
+    //         // arrayTemp = [0]
+    //         // arrayA.forEach(function (element) {
+    //         //   if (element.hasPitch == true) {
+    //         //     // arrayTemp = arrayTemp.push(element.timeStart)
+    //         //     // setArrayFreeTime(arrayTemp)
+    //         //     console.log(element.timeStart)
+    //         //   }
+    //         //   // console.log(element.timeStart)
+    //         // });
+    //         // console.log(arrayA)
+    //         // console.log(arrayTemp)
+    //         // console.log(res.data.data)
+    //     } catch (error) {
+    //         setMyBooking(JSON.stringify(error.message))
+    //         console.log(JSON.stringify(error.message))
+    //         if (JSON.stringify(error.message).indexOf("403") > -1) {
+    //             signOut()
+    //         }
+    //     }
+    // }
+    const callMyBooking = (token) => {
+        setMyBooking({
+            loading: true,
+            // data: [],
+        })
+        axios.get(`${apiURL}bookingservice/getMyBooking`,
+            {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'multipart/form-data'
+                }
             })
-            const res = await axios.get(`${apiURL}bookingservice/getMyBooking`,
-                {
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-            setMyBooking({
-                loading: false,
-                data: res.data.data,
+            .then(res => {
+                // console.log(response.data.data)
+                setMyBooking({
+                    loading: false,
+                    data: res.data.data,
+                })
+                console.log(res.data.data)
             })
-            console.log(res.data.data)
             // setIsLoadingFreeTime({ isLoadingFreeTime: false })
             // arrayA = res.data.data
             // arrayTemp = [0]
@@ -68,10 +114,15 @@ const History = (navigation) => {
             // console.log(arrayA)
             // console.log(arrayTemp)
             // console.log(res.data.data)
-        } catch (error) {
-            setMyBooking(JSON.stringify(error.message))
-        }
+            .catch(error => {
+                setMyBooking(JSON.stringify(error.message))
+                // console.log(JSON.stringify(error.message))
+                // if (JSON.stringify(error.message).indexOf("403") > -1) {
+                //     signOut()
+                // }
+            })
     }
+
     if (myBooking.loading) {
         return (
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -89,7 +140,7 @@ const History = (navigation) => {
                         fontSize: 20,
                         fontWeight: 'bold',
                         color: '#fff',
-                    }}>User Profile</Text>
+                    }}>Danh sách đặt sân</Text>
                 </View>
                 <FlatList
                     contentContainerStyle={styles.listContainer}
@@ -99,7 +150,7 @@ const History = (navigation) => {
                     refreshControl={
                         <RefreshControl
                             refreshing={myBooking.loading}
-                            onRefresh={() => callMyBooking(userToken.userToken)} 
+                            onRefresh={() => callMyBooking(userToken.userToken)}
                         />
                     }
                 />

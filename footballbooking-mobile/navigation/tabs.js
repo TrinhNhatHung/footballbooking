@@ -52,7 +52,7 @@ const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
           <TouchableOpacity
               style={{
                   flex: 1,
-                  height: 60,
+                  height: 50,
                   backgroundColor: 'white'
               }}
               activeOpacity={1}
@@ -84,7 +84,7 @@ const Tabs = () => {
             name="HomeTab"
             component={Home}
             options={{
-              tabBarLabel: '',
+              tabBarLabel: 'Home',
               tabBarIcon: ({color}) => <FontAwesome5 name="binoculars" size={30} color={color} />,
               tabBarButton: (props) => (
                   <TabBarCustomButton
@@ -96,7 +96,7 @@ const Tabs = () => {
             name="HistoryTab"
             component={History}
             options={{
-              tabBarLabel: '',
+              tabBarLabel: 'History',
               tabBarIcon: ({color}) => <Fontisto name="bookmark-alt" size={30} color={color} />,
               tabBarButton: (props) => (
                   <TabBarCustomButton
@@ -108,7 +108,7 @@ const Tabs = () => {
             name="ProfileTab"
             component={Profile}
             options={{
-              tabBarLabel: '',
+              tabBarLabel: 'Profile',
               tabBarIcon: ({color}) => <Ionicons name="person-circle" size={30} color={color} />,
               tabBarButton: (props) => (
                   <TabBarCustomButton
