@@ -27,22 +27,22 @@ const Home = ({ navigation }) => {
   });
 
   const [searchText, setSearchText] = useState('')
-  // const [pitchTypeChecked, setpitchTypeChecked] = React.useState([
-  //   { id: 1, pitchType: 'Sân 5', isChecked: false },
-  //   { id: 2, pitchType: 'Sân 7', isChecked: false },
-  //   { id: 3, pitchType: 'Sân 11', isChecked: false },
-  // ]);
+  const [pitchTypeChecked, setpitchTypeChecked] = React.useState([
+    { id: 1, pitchType: 'Sân 5', isChecked: false },
+    { id: 2, pitchType: 'Sân 7', isChecked: false },
+    { id: 3, pitchType: 'Sân 11', isChecked: false },
+  ]);
 
-  // const [zoneChecked, setZoneChecked] = React.useState([
-  //   { id: 1, zone: 'Hải Châu', isChecked: false },
-  //   { id: 2, zone: 'Cẩm Lệ', isChecked: false },
-  //   { id: 3, zone: 'Thanh Khê', isChecked: false },
-  //   { id: 4, zone: 'Liên Chiểu', isChecked: false },
-  //   { id: 5, zone: 'Ngũ Hành Sơn', isChecked: false },
-  //   { id: 6, zone: 'Sơn Trà', isChecked: false },
-  //   { id: 7, zone: 'Hòa Vang', isChecked: false },
-  //   { id: 8, zone: 'Hoàng Sa', isChecked: false },
-  // ]);
+  const [zoneChecked, setZoneChecked] = React.useState([
+    { id: 1, zone: 'Hải Châu', isChecked: false },
+    { id: 2, zone: 'Cẩm Lệ', isChecked: false },
+    { id: 3, zone: 'Thanh Khê', isChecked: false },
+    { id: 4, zone: 'Liên Chiểu', isChecked: false },
+    { id: 5, zone: 'Ngũ Hành Sơn', isChecked: false },
+    { id: 6, zone: 'Sơn Trà', isChecked: false },
+    { id: 7, zone: 'Hòa Vang', isChecked: false },
+    { id: 8, zone: 'Hoàng Sa', isChecked: false },
+  ]);
 
   const [isLoading, setisLoading] = useState(true);
 
