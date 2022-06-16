@@ -7,6 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
+import { apiURL } from '../api/config';
 
 export default function historyItem(props) {
     // const { pitch } = props.pitch
@@ -16,7 +17,7 @@ export default function historyItem(props) {
     const [status, setStatus] = useState(pitch.status)
     // const {pitch} = props
     // console.log(pitch)
-    const apiURL = 'http://192.168.1.5:8080/';
+    // const apiURL = 'http://192.168.1.5:8080/';
     const cancelBookingHandle = (token, bookingId) => {
         // console.log(bookingId + "...." +token)
         if ( pitch.time.slice(0,10) == moment().format('DD/MM/YYYY').toString()){

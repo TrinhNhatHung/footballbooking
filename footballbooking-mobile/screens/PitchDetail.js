@@ -11,17 +11,18 @@ import PitchItem from '../components/pitchItem';
 import Search from '../components/search';
 import DatePicker from '../components/datePicker';
 import TimeSlot from '../components/timeSlot';
+import { apiURL } from '../api/config';
 
 import anhSanBong from '../assets/images/sanbong.jpg'
 
 const PitchDetail = ({ route, navigation }) => {
-  const apiURL = 'http://192.168.1.5:8080/';
+  // const apiURL = 'http://192.168.1.5:8080/';
   const { pitch } = route.params
   const [showCalender, setShowCalender] = useState(false);
   const [pitchTypeId, setPitchTypeId] = useState('1');
   const [isReady, setisReady] = useState(true);
   const [hourStart, setHourStart] = useState({
-    hourStart:'00:00',
+    hourStart: '00:00',
     miniPitchId: [],
     modalVisible: false,
   });
@@ -38,7 +39,7 @@ const PitchDetail = ({ route, navigation }) => {
   //   setHourStart({ hourStart: childData })
   // }
 
-  arrayA = []
+  // arrayA = []
   arrayTemp = []
   arrayData = []
   count = 0;
@@ -98,10 +99,10 @@ const PitchDetail = ({ route, navigation }) => {
 
         // console.log(arrayTemp[0].timeStart.slice(0,2))
         // console.log(moment().add(10, 'minutes').format('hh:mm'))
-        if ( bookingDate == moment().format('YYYY/MM/DD').toString()){
-          arrayData = arrayTemp.filter(function(data) {
+        if (bookingDate == moment().format('YYYY/MM/DD').toString()) {
+          arrayData = arrayTemp.filter(function (data) {
             // console.log(data.timeStart.slice(0,2) > moment().add(10, 'minutes').format('hh').toString())
-            return data.timeStart.slice(0,2) > moment().add(10, 'minutes').format('HH').toString();
+            return data.timeStart.slice(0, 2) > moment().add(10, 'minutes').format('HH').toString();
           });
         } else arrayData = arrayTemp;
         // console.log(arrayFreeTime)
@@ -182,7 +183,7 @@ const PitchDetail = ({ route, navigation }) => {
         Alert.alert('Success', 'Your booking has been sent', [
           { text: 'Okay' }
         ]);
-        hourStart.miniPitchId.splice(hourStart.miniPitchId.indexOf(miniPitchId),1)
+        hourStart.miniPitchId.splice(hourStart.miniPitchId.indexOf(miniPitchId), 1)
         setHourStart({
           hourStart: hourStart.hourStart,
           miniPitchId: hourStart.miniPitchId,
@@ -262,7 +263,7 @@ const PitchDetail = ({ route, navigation }) => {
               </View>
               {(freeTime.loading) ?
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                  <ActivityIndicator size="large" />
+                  <ActivityIndicator size="large" animating color={'green'} />
                   {/* {console.log(isLoadingFreeTime)} */}
                 </View>
                 : (
@@ -276,7 +277,7 @@ const PitchDetail = ({ route, navigation }) => {
 
                     marginRight: 5,
                     flexWrap: 'wrap',
-                    flexDirection:'row'
+                    flexDirection: 'row'
                   }}>
                     {/* <FlatList
                   data={arrayFreeTime}
@@ -285,14 +286,15 @@ const PitchDetail = ({ route, navigation }) => {
                 /> */}
                     {freeTime.data.map(freeTime => (
                       // <TimeSlot time={freeTime.timeStart} parentCallback={getTime} />
-                      <View style={styles.timeSlotContainer}>
+                      <View style={styles.timeSlotContainer} key={freeTime.timeStart}>
                         <TouchableOpacity
+
                           onPress={() => {
-                            setHourStart({ 
+                            setHourStart({
                               hourStart: freeTime.timeStart,
                               miniPitchId: freeTime.miniPitchId,
                               modalVisible: true,
-                             });
+                            });
                             // setModalVisible(true)
                           }}>
                           <Text>{freeTime.timeStart}</Text>
@@ -348,14 +350,31 @@ const PitchDetail = ({ route, navigation }) => {
           animationType="slide"
           transparent={true}
           visible={hourStart.modalVisible}
-          // onRequestClose={() => {
-          //   Alert.alert("Modal has been closed.");
+          // onBackButtonPress ={() => {
           //   setHourStart({
-          //     hourStart: hourStart.hourStart,
-          //     miniPitchId: hourStart.miniPitchId,
+          //     // hourStart: hourStart.hourStart,
+          //     // miniPitchId: hourStart.miniPitchId,
           //     modalVisible: !hourStart.modalVisible
-          //   });
-          // }}
+          //   })
+          //   console.log('Back')
+          // // }}
+          onRequestClose={() => {
+            setHourStart({
+              hourStart: hourStart.hourStart,
+              miniPitchId: hourStart.miniPitchId,
+              modalVisible: !hourStart.modalVisible
+            })
+          }
+        }
+          // onBackdropPress={() => console.log('Something')}
+        // onRequestClose={() => {
+        //   Alert.alert("Modal has been closed.");
+        //   setHourStart({
+        //     hourStart: hourStart.hourStart,
+        //     miniPitchId: hourStart.miniPitchId,
+        //     modalVisible: !hourStart.modalVisible
+        //   });
+        // }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -366,35 +385,39 @@ const PitchDetail = ({ route, navigation }) => {
               >
                 <Text style={styles.textStyle}>Hide Modal</Text>
               </Pressable> */}
-             
-              { (hourStart.miniPitchId.length != 0) ?
-              hourStart.miniPitchId.map(miniPitchId => (
+
+              {(hourStart.miniPitchId.length != 0) ?
+                hourStart.miniPitchId.map(miniPitchId => (
+                  <TouchableOpacity
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      width: 100,
+                      height: 30,
+                      paddingHorizontal: 10,
+                      marginLeft: 16,
+                      marginBottom: 10,
+                      backgroundColor: '#368340',
+                    }}
+                    onPress={() => {
+                      bookingHandle(userToken.userToken, hourStart.hourStart, miniPitchId, date.date);
+                      setHourStart({
+                        hourStart: hourStart.hourStart,
+                        miniPitchId: hourStart.miniPitchId,
+                        modalVisible: !hourStart.modalVisible
+                      })
+                      // console.log(userToken.userToken+'.....'+hourStart.hourStart+'......'+freeTime+'.......'+ date.date)
+                    }}
+                    key={miniPitchId}
+                  >
+                    <Text style={{ color: 'white', textTransform: 'uppercase', }}>{miniPitchId}</Text>
+                  </TouchableOpacity>
+                ))
+
+
+                :
                 <TouchableOpacity
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderWidth: 1,
-                    width: 100,
-                    height: 30,
-                    paddingHorizontal: 10,
-                    marginLeft: 16,
-                    marginBottom: 10,
-                    backgroundColor: '#368340',
-                  }}
-                  onPress={() => {
-                    bookingHandle(userToken.userToken, hourStart.hourStart, miniPitchId, date.date);
-                    setHourStart({
-                      hourStart: hourStart.hourStart,
-                      miniPitchId: hourStart.miniPitchId,
-                      modalVisible: !hourStart.modalVisible
-                    })
-                    // console.log(userToken.userToken+'.....'+hourStart.hourStart+'......'+freeTime+'.......'+ date.date)
-                  }}
-                >
-                  <Text style={{ color: 'white', textTransform: 'uppercase', }}>{miniPitchId}</Text>
-                </TouchableOpacity>
-              )):
-              <TouchableOpacity
                   style={{
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -445,101 +468,39 @@ const PitchDetail = ({ route, navigation }) => {
               }}
             />
             <View style={styles.text}>
+              {pitch.detail.map(pitchDetail => (
+                // <TimeSlot time={freeTime.timeStart} parentCallback={getTime} />
+                <View key={pitchDetail.pitchTypeId}>
+                  <Text style={styles.pitchDetailName}>{pitchDetail.pitchTypeName}</Text>
+                  {pitchDetail.timeSlots.map(timeSlots => (
+                    <View style={styles.timePrice} key={new Date().getTime().toString()}>
+                      <Text style={styles.time}>{timeSlots.timeStart} - {timeSlots.timeEnd}   {timeSlots.dayOfWeekStart} - {timeSlots.dayOfWeekEnd}</Text>
+                      <Text style={styles.price}>{timeSlots.cost}</Text>
+                      <TouchableOpacity
+                        style={{
+                          position: 'absolute',
+                          top: 3,
+                          right: 0,
+                          zIndex: 10,
+                        }}
+                        onPress={() => {
+                          setShowCalender({ showCalender: true })
+                          setPitchTypeId({ pitchTypeId: 1 })
+                          callGetFreeTimeSlot(date.date, pitch.pitchId, 1)
+                          // getArrayFreeTimeSlot(arrayA)
+                        }}
 
-              <Text style={styles.pitchDetailName}>Sân 5</Text>
-              <View style={styles.timePrice}>
-                <Text style={styles.time}>5:00 - 16:00   Thứ 2 - Chủ Nhật</Text>
-                <Text style={styles.price}>180.000VNĐ</Text>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    top: 3,
-                    right: 0,
-                    zIndex: 10,
-                  }}
-                  onPress={() => {
-                    setShowCalender({ showCalender: true })
-                    setPitchTypeId({ pitchTypeId: 1 })
-                    callGetFreeTimeSlot(date.date, pitch.pitchId, 1)
-                    // getArrayFreeTimeSlot(arrayA)
-                  }}
+                      >
+                        <FontAwesome name="calendar-check-o" size={20} color="black" />
+                      </TouchableOpacity>
+                    </View>
+                  ))
+                  }
 
-                >
-                  <FontAwesome name="calendar-check-o" size={20} color="black" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.timePrice}>
-                <Text style={styles.time}>17:00 - 22:00 Thứ 2 - Chủ Nhật</Text>
-                <Text style={styles.price}>220.000VNĐ</Text>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    top: 3,
-                    right: 0,
-                    zIndex: 10,
-                  }}
-                  onPress={() => {
-                    setShowCalender({ showCalender: true })
-                    setPitchTypeId({ pitchTypeId: 1 })
-                    callGetFreeTimeSlot(date.date, pitch.pitchId, 1)
-                    // getArrayFreeTimeSlot(arrayA)
-                  }}
+                </View>
+              ))}
 
-                >
-                  <FontAwesome name="calendar-check-o" size={20} color="black" />
-                </TouchableOpacity>
-              </View>
 
-              {/* <View style={styles.phone}>
-                <Text style={styles.phoneNumberTittle}>Số điện thoại:</Text>
-                <Text style={styles.phoneNumber}>0356112087</Text>
-              </View> */}
-            </View>
-            <View style={styles.text}>
-
-              <Text style={styles.pitchDetailName}>Sân 7</Text>
-              <View style={styles.timePrice}>
-                <Text style={styles.time}>5:00 - 16:00   Thứ 2 - Chủ Nhật</Text>
-                <Text style={styles.price}>180.000VNĐ</Text>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    top: 3,
-                    right: 0,
-                    zIndex: 10,
-                  }}
-                  onPress={() => {
-                    setShowCalender({ showCalender: true })
-                    setPitchTypeId({ pitchTypeId: 2 })
-                    callGetFreeTimeSlot(date.date, pitch.pitchId, 2)
-                    // getArrayFreeTimeSlot(arrayA)
-                  }}
-
-                >
-                  <FontAwesome name="calendar-check-o" size={20} color="black" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.timePrice}>
-                <Text style={styles.time}>17:00 - 22:00 Thứ 2 - Chủ Nhật</Text>
-                <Text style={styles.price}>220.000VNĐ</Text>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    top: 3,
-                    right: 0,
-                    zIndex: 10,
-                  }}
-                  onPress={() => {
-                    setShowCalender({ showCalender: true })
-                    setPitchTypeId({ pitchTypeId: 2 })
-                    callGetFreeTimeSlot(date.date, pitch.pitchId, 2)
-                    // getArrayFreeTimeSlot(arrayA)
-                  }}
-
-                >
-                  <FontAwesome name="calendar-check-o" size={20} color="black" />
-                </TouchableOpacity>
-              </View>
 
               <View style={styles.phone}>
                 <Text style={styles.phoneNumberTittle}>Số điện thoại:</Text>
@@ -558,7 +519,7 @@ const PitchDetail = ({ route, navigation }) => {
           </TouchableOpacity> */}
         </View>
       </ScrollView>
-    </View>
+    </View >
   )
 }
 
