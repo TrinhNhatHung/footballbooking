@@ -3,8 +3,8 @@ import FormNewPitch from "../components/FormNewPitch/formNewPitch";
 
 const FormNewPitchPage = () => {
   return (
-    <div>
-      <FormNewPitch/>
+    <div style={{ marginBottom: "250px" }}>
+      <FormNewPitch />
     </div>
   );
 };

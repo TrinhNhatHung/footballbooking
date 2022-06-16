@@ -64,7 +64,7 @@ const PitchRequest = () => {
   useEffect(() => {
     requestList();
   }, []);
-  const acceptRequest = (bookingId)=> {
+  const acceptRequest = (bookingId) => {
     var data = new FormData();
     data.append("bookingId", bookingId);
     var config = {
@@ -85,7 +85,7 @@ const PitchRequest = () => {
       });
   }
 
-  const denyRequest = (bookingId)=> {
+  const denyRequest = (bookingId) => {
     var data = new FormData();
     data.append("bookingId", bookingId);
     var config = {
@@ -131,16 +131,16 @@ const PitchRequest = () => {
                 return (
                   <tr>
                     <td>{index}</td>
-                    <td>{request.miniPitch.pitchName}</td>
+                    <td>{request?.miniPitch?.pitchName}</td>
                     <td>
-                      {`Loại sân:${request.miniPitch.pitchType}`}  <br /> {`Sân số: ${request.miniPitch.miniPitchName}`}
+                      {`Loại sân:${request?.miniPitch?.pitchType}`}  <br /> {`Sân số: ${request.miniPitch.miniPitchName}`}
                     </td>
-                    <td>{request.bookingUser.fullname}</td>
-                    <td>{request.hourStart} - {request.hourEnd} ngày {request.bookingDate}</td>
-                    <td>{request.message}</td>
+                    <td>{request?.bookingUser?.fullname}</td>
+                    <td>{request?.hourStart} - {request?.hourEnd} ngày {request?.bookingDate}</td>
+                    <td>{request?.message}</td>
                     <td>
-                      <button onClick={()=>acceptRequest(request.bookingId)} className="btn btn-success mr-30">Chấp nhận</button>
-                      <button onClick={()=>denyRequest(request.bookingId)} className="btn btn-danger">Từ chối</button>
+                      <button onClick={() => acceptRequest(request?.bookingId)} className="btn btn-success mr-30">Chấp nhận</button>
+                      <button onClick={() => denyRequest(request?.bookingId)} className="btn btn-danger">Từ chối</button>
                     </td>
                   </tr>
                 );

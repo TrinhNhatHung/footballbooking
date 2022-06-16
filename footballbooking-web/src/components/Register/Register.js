@@ -65,7 +65,7 @@ const Title = styled.h1`
 
 const Form = styled.form`
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 `;
 
 const Input = styled.input`
@@ -89,8 +89,29 @@ const Button = styled.button`
     cursor: pointer;
 `;
 
+function ValidateEmail(input) {
+
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (input?.match(validRegex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function ValidatePhone(input) {
+
+    var validRegex = /^\d{10}$/;
+    if (input?.match(validRegex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function Register(props) {
     const [input, setInput] = useState({})
+    const [passwordAgain, setPasswordAgain] = useState('')
     const { onClickSignup } = props
     function handleOnChange(e) {
         const inputcur = input
@@ -99,9 +120,12 @@ function Register(props) {
             [e.target.name]: e.target.value
         })
     }
+    function handleOnChangePasswordAgain(e) {
+        setPasswordAgain(e.target.value)
+    }
     function handleClickSignUp(event) {
         event.preventDefault()
-        if (onClickSignup) {
+        if (onClickSignup && passwordAgain === input.password && ValidatePhone(input.phone) && ValidateEmail(input.email)) {
             onClickSignup(input)
         }
     }
@@ -117,8 +141,13 @@ function Register(props) {
                     <Form>
                         <Input placeholder="full name" name="fullname" onChange={handleOnChange} value={input.fullname} />
                         <Input placeholder="email" name="email" onChange={handleOnChange} value={input.email} />
+                        {(!ValidateEmail(input.email) && input.email !== undefined) ? <div style={{ color: 'red', textAlign: 'start', marginTop: '5px' }}>Email không hợp lại</div> : ""}
                         <Input placeholder="phone" name="phone" onChange={handleOnChange} value={input.phone} />
-                        <Input placeholder="password" name="password" onChange={handleOnChange} value={input.password} />
+                        {(!ValidatePhone(input.phone) && input.phone !== undefined) ? <div style={{ color: 'red', textAlign: 'start', marginTop: '5px' }}>Phone không hợp lại</div> : ""}
+                        <Input placeholder="password" type={"password"} name="password" onChange={handleOnChange} value={input.password} />
+                        <Input placeholder="password again" type={"password"} name="passwordAgain" onChange={handleOnChangePasswordAgain} value={passwordAgain} />
+                        {(input.password !== undefined && input.password !== passwordAgain && passwordAgain !== '') ? <div style={{ color: 'red', textAlign: 'start', marginTop: '5px' }}>Mật khẩu không hợp lại</div> : ""}
+                        {console.log(input.password + " = " + passwordAgain)}
                         <Agreement>By creating an account, I consent to the processing of my personal
                             data in accordance with the<b> PRIVACY POLICY</b>
                         </Agreement>
