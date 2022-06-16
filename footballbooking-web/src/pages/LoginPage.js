@@ -22,6 +22,7 @@ function LoginPage(props) {
             ...inputV
         })
         const checkLogin = async () => {
+            console.log(JSON.stringify(inputV) + "v")
             if (JSON.stringify(inputV) != "{}") {
                 const response = await userApi.checkLogin(inputV);
                 if (response.data?.isAuthen === true) {
@@ -30,18 +31,22 @@ function LoginPage(props) {
                     localStorage.setItem('fullname', response.data.fullName)
                     localStorage.setItem('infor', JSON.stringify(response.data));
                     setCheck(true)
-                    if (response.data.role === "ROLE_CUSTOMER"){
+                    if (response.data.role === "ROLE_CUSTOMER") {
                         navigate('/');
-                    } else if(response.data.role === "ROLE_PITCHOWNER"){
+                    } else if (response.data.role === "ROLE_PITCHOWNER") {
                         navigate('/pitchowner/booking');
+                    } else if (response.data.role === "ROLE_ADMIN") {
+                        navigate('/');
                     } else {
                         console.log("ERROR")
                         setCheck(false)
                     }
                 }
+            }
+        }
         checkLogin()
-    }
 
+    }
     return (
         <div>
             <Login check={check} onClickLogin={handleClickLogin} />

@@ -81,6 +81,7 @@ function Login(props) {
         })
     }
     function handleClickLogin(event) {
+        console.log(onClickLogin)
         event.preventDefault()
         if (onClickLogin) {
             onClickLogin(input)

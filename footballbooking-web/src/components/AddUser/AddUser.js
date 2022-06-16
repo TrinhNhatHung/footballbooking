@@ -8,6 +8,26 @@ AddUser.propTypes = {
 
 };
 
+function ValidateEmail(input) {
+
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (input?.match(validRegex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function ValidatePhone(input) {
+
+    var validRegex = /^\d{10}$/;
+    if (input?.match(validRegex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function AddUser(props) {
 
     const [inforOwner, setInforOwner] = useState({})
@@ -64,7 +84,9 @@ function AddUser(props) {
                 navigate('../list-user')
             }
         }
-        addOwner();
+        if (inforOwner.password === passwordAgain && inforOwner.password !== "" && passwordAgain !== "" && ValidatePhone(inforOwner.phone) && ValidateEmail(inforOwner.email)) {
+            addOwner();
+        }
 
     }
 
@@ -96,6 +118,7 @@ function AddUser(props) {
                                         value={inforOwner.phone}
                                         onChange={handleChangePhone} />
                                     {(!checkPhone) ? <span className='errorPassword'>Số điện thoại đã dùng</span> : ""}
+                                    {(!ValidatePhone(inforOwner.phone) && inforOwner.phone !== undefined) ? <span className='errorPassword'>Phone không hợp lệ</span> : ""}
                                 </div>
                             </div>
                             <div className="form-group">
@@ -124,6 +147,7 @@ function AddUser(props) {
                                         value={inforOwner.email}
                                         onChange={handleChangeEmail}
                                     />
+                                    {(!ValidateEmail(inforOwner.email) && inforOwner.email !== undefined) ? <span className='errorPassword'>Email không hợp lệ</span> : ""}
                                 </div>
                             </div>
                             <hr />

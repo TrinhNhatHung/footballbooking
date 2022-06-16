@@ -116,12 +116,12 @@ function ListUser(props) {
                             {
                                 users.map((user) => (
                                     <tr key={user.userId}>
-                                        <td>{user.fullname}</td>
-                                        <td>{user.phone}</td>
-                                        <td>{user.email}</td>
-                                        <td>Quảng Nam</td>
-                                        <th className='center'><span className={(user.status) ? 'accept' : 'cancel'}>{(user.status) ? 'Mở' : 'Đã khóa'}</span></th>
-                                        <td>
+                                        <td className='center line-44'>{user.fullname}</td>
+                                        <td className='center line-44'>{user.phone}</td>
+                                        <td className='center line-44'>{user.email}</td>
+                                        <td className='center line-44'>Quảng Nam</td>
+                                        <th className='center line-44'><span className={(user.status) ? 'accept' : 'cancel'}>{(user.status) ? 'Mở' : 'Đã khóa'}</span></th>
+                                        <td className='center'>
                                             {
                                                 (user.status) ? <button type="button" class="btn btn-warning" data-toggle="modal" data-target={`#modelLockUnLock${user.userId}`}>Khóa</button>
                                                     : <button type="button" class="btn btn-warning" data-toggle="modal" data-target={`#modelLockUnLock${user.userId}`}>Mở khóa</button>

@@ -19,26 +19,26 @@ function Header(props) {
     const navigate = useNavigate();
     const roleUser = localStorage.getItem("role");
 
-    const navLink = ()=> {
-        if (roleUser === null || roleUser === undefined || roleUser === "ROLE_CUSTOMER"){
+    const navLink = () => {
+        if (roleUser === null || roleUser === undefined || roleUser === "ROLE_CUSTOMER") {
             return <ul className="nav navbar-nav">
                 <li className=""><Link to="/">Home</Link></li>
             </ul>
         }
 
-        if (roleUser === "ROLE_PITCHOWNER"){
+        if (roleUser === "ROLE_PITCHOWNER") {
             return <ul className="nav navbar-nav">
                 <li className=""><Link to="/pitchowner/booking">DS yêu cầu đặt sân</Link></li>
             </ul>
         }
     }
 
-    const homeLink =  ()=> {
-        if (roleUser === null || roleUser === undefined || roleUser === "ROLE_CUSTOMER"){
+    const homeLink = () => {
+        if (roleUser === null || roleUser === undefined || roleUser === "ROLE_CUSTOMER") {
             return <a href="/" className="navbar-brand">FOOTBALL BOOKING</a>
         }
 
-        if (roleUser === "ROLE_PITCHOWNER"){
+        if (roleUser === "ROLE_PITCHOWNER") {
             return <a href="/pitchowner/pitchList" className="navbar-brand">Sân bóng của tôi</a>
         }
     }
@@ -69,7 +69,7 @@ function Header(props) {
                                     <div className="navbar-header">
                                         <button className="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span className="icon-bar" /><span className="icon-bar" /><span className="icon-bar" /></button>
                                         {/* <a href="#" className="navbar-brand">FOOTBALL BOOKING</a> */}
-                                        <Link to="/" className="navbar-brand">FOOTBALL BOOKING</Link>
+                                        {/* <Link to="/" className="navbar-brand">FOOTBALL BOOKING</Link> */}
                                         {homeLink()}
                                     </div>
                                     <div className="navbar-collapse collapse" id="mobile_menu">
