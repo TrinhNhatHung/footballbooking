@@ -20,4 +20,10 @@ public class MiniPitchDao extends EntityDao<MiniPitch>{
 	public MiniPitch getById (Integer miniPitchId) {
 		return super.getById(MiniPitch.class, miniPitchId);
 	}
+	
+	public void insertList (List<MiniPitch> miniPitchs) {
+		for (MiniPitch miniPitch : miniPitchs) {
+			super.insert(miniPitch);
+		}
+	}
 }

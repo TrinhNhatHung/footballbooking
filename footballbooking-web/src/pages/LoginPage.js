@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Login from '../components/Login/Login';
-import userApi from '../api/userApi';
-import axios from 'axios';
-import queryString, { stringify } from 'query-string';
-import { useNavigate } from 'react-router-dom';
-import AlertNotification from '../components/AlertNotification/AlertNotification';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import Login from "../components/Login/Login";
+import userApi from "../api/userApi";
+import axios from "axios";
+import queryString, { stringify } from "query-string";
+import { useNavigate } from "react-router-dom";
+import AlertNotification from "../components/AlertNotification/AlertNotification";
 
-LoginPage.propTypes = {
-
-};
+LoginPage.propTypes = {};
 
 function LoginPage(props) {
 
@@ -48,10 +46,9 @@ function LoginPage(props) {
 
     }
     return (
-        <div>
-            <Login check={check} onClickLogin={handleClickLogin} />
-        </div>
-
+      <div>
+        <Login check={check} onClickLogin={handleClickLogin} />
+      </div>
     );
 }
 

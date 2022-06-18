@@ -73,6 +73,10 @@ const PitchList = () => {
   const createNewPitch = ()=> {
     navigate("/pitchowner/createNewPitch");
   }
+
+  const addMiniPitch = (pitchId)=> {
+    navigate(`/pitchowner/addMiniPitch/${pitchId}`);
+  }
   return (
     <div>
       <Container>
@@ -110,7 +114,7 @@ const PitchList = () => {
                     </td>
                     <td>
                       <Action>
-                        <button style={{marginBottom :5}} className="btn btn-success">Thêm sân thành phần</button>
+                        <button style={{marginBottom :5}} className="btn btn-success" onClick={()=> addMiniPitch(pitch.pitchId)}>Thêm sân thành phần</button>
                         <button style={{marginBottom :5}} className="btn btn-success">
                           Sửa thông tin
                         </button>

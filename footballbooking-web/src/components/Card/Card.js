@@ -33,7 +33,7 @@ function Card(props) {
                     <div className="row">
                         <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 card-image">
                             <div className=''>
-                                <img className='card-image-link' src={require('../../assets/images/' + pitch.coverAvatar)} />
+                                <img className='card-image-link' src= {pitch.coverAvatarLink} />
                             </div>
                         </div>
 

@@ -34,12 +34,15 @@ const FormNewPitch = () => {
 
     axiosClientPost(config)
       .then(() => {
-        console.log("hung");
         navigate("/pitchowner/pitchList");
       })
       .catch(() => {
       });
   };
+
+  const navigateToMyPitchPage = ()=> {
+    navigate("/pitchowner/pitchList");
+  }
 
   return (
     <div className="formNewPitch container">
@@ -145,7 +148,7 @@ const FormNewPitch = () => {
           <button type="reset" className="btn btn-primary">
             Reset
           </button>
-          <button type="button" className="btn btn-danger">
+          <button type="button" className="btn btn-danger" onClick={navigateToMyPitchPage}>
             Quay lại
           </button>
         </div>

@@ -1,0 +1,30 @@
+.formNewMiniPitch {
+    margin-top: 100px;
+    margin-bottom: 220px;
+}
+
+.container {
+    width: 50%;
+}
+
+.add-time-slot {
+    justify-content: start;
+    padding-left: 7%;
+    cursor: pointer;
+}
+
+.add-time-slot .glyphicon {
+    margin-right: 5px;
+}
+
+.timeSlot {
+    margin-bottom: 15px;
+}
+
+.timeSlot .col {
+    margin: 25px;
+}
+
+.btn-remove-time-slot {
+    margin-top: 60px;
+}
