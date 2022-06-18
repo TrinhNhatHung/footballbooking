@@ -1,5 +1,6 @@
 package com.footballbooking.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.footballbooking.constant.MessageConst;
 import com.footballbooking.entity.Address;
 import com.footballbooking.entity.Pitch;
+import com.footballbooking.entity.PitchDetail;
+import com.footballbooking.entity.PitchType;
 import com.footballbooking.response.PitchResponse;
 import com.footballbooking.service.PitchService;
+import com.footballbooking.service.PitchTypeService;
+import com.footballbooking.util.DateUtil;
 import com.footballbooking.util.ResponseUtil;
 
 @RestController
@@ -33,6 +38,9 @@ public class PitchApi {
 	
 	@Autowired
 	private PitchService pitchService;
+	
+	@Autowired
+	private PitchTypeService pitchTypeService;
 	
 	@GetMapping("/pitchs")
 	public ResponseEntity<?> pitchs (@RequestParam(name = "page", required = false) Integer page,
@@ -114,6 +122,41 @@ public class PitchApi {
 		pitch.setAddress(address);
 		try {
 			pitchService.insert(pitch);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		
+		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/addNewMiniPitch")
+	public ResponseEntity<?> addNewMiniPitch (@RequestParam(name = "pitchId") Integer pitchId,
+											  @RequestParam(name = "pitchTypeId") Integer pitchTypeId,
+											  @RequestParam(name = "quantity") Integer quantity,
+											  @RequestParam(name ="startDOW") List<Integer> startDowList,
+											  @RequestParam(name ="endDOW") List<Integer> endDowList,
+											  @RequestParam(name ="startHour") List<String> startHourList,
+											  @RequestParam(name ="endHour") List<String> endHourList,
+											  @RequestParam(name ="cost") List<Integer> costList){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			PitchType pitchType = pitchTypeService.getById(pitchTypeId);
+			Pitch pitch = pitchService.getById(pitchId);
+			List<PitchDetail> pitchDetailList = new ArrayList<>();
+			for (int i= 0; i< startDowList.size(); i++) {
+				PitchDetail pitchDetail = new PitchDetail();
+				pitchDetail.setDayOfWeekStart(startDowList.get(i));
+				pitchDetail.setDayOfWeekEnd(endDowList.get(i));
+				pitchDetail.setTimeStart(DateUtil.convertStringToLocalTime(startHourList.get(i), "HH:mm:ss"));
+				pitchDetail.setTimeEnd(DateUtil.convertStringToLocalTime(endHourList.get(i), "HH:mm:ss"));
+				pitchDetail.setCost(costList.get(i));
+				pitchDetail.setPitchType(pitchType);
+				pitchDetail.setPitch(pitch);
+				pitchDetailList.add(pitchDetail);
+			}
+			pitchService.insertMiniPitch(pitch, pitchType, quantity, pitchDetailList);
 			result = ResponseUtil.createResponse(true, null, "");
 		} catch (Exception e) {
 			e.printStackTrace();

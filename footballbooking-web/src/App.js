@@ -15,6 +15,7 @@ import ListUser from "./components/List-User/ListUser";
 import Profile from './components/Profile/Profile';
 import MyPitchList from "./pages/MyPitchList";
 import FormNewPitch from "./pages/FormNewPitch";
+import AddNewMiniPitchPage from "./pages/AddNewMiniPitchPage";
 
 function App() {
   const [pitchId, setPitchId] = useState();
@@ -42,6 +43,7 @@ function App() {
           path={"/pitchowner/createNewPitch"}
           element={<FormNewPitch />}
         ></Route>
+        <Route path={"/pitchowner/addMiniPitch/:pitchId"} element={<AddNewMiniPitchPage />}></Route>
         <Route path={'/management/booking'} element={<Management />}></Route>
         <Route path={"/list-user"} element={<ListUser />}></Route>
         <Route path={"/add-user"} element={<AddUser />}></Route>

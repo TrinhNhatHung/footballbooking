@@ -22,4 +22,11 @@ public class PitchDetailDao extends EntityDao<PitchDetail>{
 											.setParameter("dayOfWeek", bookingDayOfWeek);
 		return query.getResultList();
 	}
+	
+	public void insertList(List<PitchDetail> pitchDetails ) {
+		for (PitchDetail pitchDetail : pitchDetails) {
+			super.insert(pitchDetail);
+		}
+	}
 }
+

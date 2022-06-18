@@ -12,4 +12,8 @@ public class PitchTypeDao extends EntityDao<PitchType>{
 	public List<PitchType> getAll(){
 		return super.getAll(PitchType.class);
 	}
+	
+	public PitchType getById(Integer pitchTypeId) {
+		return super.getById(PitchType.class, pitchTypeId);
+	}
 }
