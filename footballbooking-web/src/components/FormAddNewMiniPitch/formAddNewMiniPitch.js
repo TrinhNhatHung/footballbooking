@@ -6,7 +6,7 @@ import "../FormAddNewMiniPitch/formAddNewMiniPitch.css";
 function FormAddNewMiniPitch() {
   const navigate = useNavigate();
   const [pitchType, setPitchType] = useState([]);
-  const {pitchId} = useParams();
+  const { pitchId } = useParams();
   const getPitchTypes = async () => {
     var data = new FormData();
     var config = {
@@ -26,96 +26,96 @@ function FormAddNewMiniPitch() {
       .catch(() => {
       });
   };
-  useEffect(()=> {
+  useEffect(() => {
     getPitchTypes();
   }, []);
   const [pitchInfo, setPitchInfo] = useState({
     pitchId: pitchId,
-    pitchType : 1,
-    quantity : 1
+    pitchType: 1,
+    quantity: 1
   });
   const [timeSlot, setTimeSlot] = useState([]);
   const dayOfWeek = [
     {
-      value : 1,
+      value: 1,
       dow: "Thứ 2"
     },
     {
-      value : 2,
+      value: 2,
       dow: "Thứ 3"
     },
     {
-      value : 3,
+      value: 3,
       dow: "Thứ 4"
     },
     {
-      
-      value : 4,
+
+      value: 4,
       dow: "Thứ 5"
     },
     {
-      value : 5,
+      value: 5,
       dow: "Thứ 6"
     },
     {
-      value : 6,
+      value: 6,
       dow: "Thứ 7"
     },
     {
-      value : 7,
+      value: 7,
       dow: "Chủ nhật"
     },
   ]
-  const addRowTimeSlot = ()=> {
-      let newTimeSlot = timeSlot.concat({
-        startDOW : 1,
-        endDOW: 7,
-        startHour: "05:00:00",
-        endHour: "21:00:00",
-        cost: null
-      });
-      setTimeSlot(newTimeSlot);
+  const addRowTimeSlot = () => {
+    let newTimeSlot = timeSlot.concat({
+      startDOW: 1,
+      endDOW: 7,
+      startHour: "05:00:00",
+      endHour: "21:00:00",
+      cost: null
+    });
+    setTimeSlot(newTimeSlot);
   }
 
   const removeTimeSlot = (timeSlotId) => {
     let newTimeSlot = [];
-    for (let i= 0; i < timeSlotId; i++){
+    for (let i = 0; i < timeSlotId; i++) {
       newTimeSlot.push(timeSlot[i])
     }
-    for (let i= timeSlotId + 1; i < timeSlot.length; i++){
+    for (let i = timeSlotId + 1; i < timeSlot.length; i++) {
       newTimeSlot.push(timeSlot[i])
     }
     setTimeSlot(newTimeSlot);
   }
 
-  const changeTimeSlot = (event, id)=> {
+  const changeTimeSlot = (event, id) => {
     let name = event.target.name;
     let value = event.target.value;
     let object = timeSlot[id];
     let slot = {
       ...object,
-      [name] : value
-    };    
-    let newTimeSlot = timeSlot.slice(0,id);
+      [name]: value
+    };
+    let newTimeSlot = timeSlot.slice(0, id);
     newTimeSlot = newTimeSlot.concat(slot);
-    if ((id +1) < timeSlot.length){
-      newTimeSlot = newTimeSlot.concat(timeSlot.slice(id+1));
+    if ((id + 1) < timeSlot.length) {
+      newTimeSlot = newTimeSlot.concat(timeSlot.slice(id + 1));
     }
     setTimeSlot(newTimeSlot);
   }
 
-  const changePitchInfo = (event)=> {
+  const changePitchInfo = (event) => {
     setPitchInfo({
       ...pitchInfo,
-      [event.target.name] : event.target.value
+      [event.target.name]: event.target.value
     })
   }
-  const createNewMiniPitch = ()=> {
+  const createNewMiniPitch = () => {
     var data = new FormData();
     data.append("pitchId", pitchInfo.pitchId);
     data.append("pitchTypeId", pitchInfo.pitchType);
     data.append("quantity", pitchInfo.quantity);
-    timeSlot.forEach((slot)=> {
+    timeSlot.forEach((slot) => {
       data.append("startDOW", slot.startDOW);
       data.append("endDOW", slot.endDOW);
       data.append("startHour", slot.startHour);
@@ -141,7 +141,7 @@ function FormAddNewMiniPitch() {
       });
   }
   return (
-    <div className="formNewMiniPitch container">
+    <div className="formNewMiniPitch container-form">
       <form>
         <div className="row">
           <div className="col">
@@ -156,7 +156,7 @@ function FormAddNewMiniPitch() {
                 onChange={changePitchInfo}
               >
                 {
-                  pitchType.map((e, index)=> {
+                  pitchType.map((e, index) => {
                     return <option key={index} value={e.pitchTypeId}>{e.name}</option>
                   })
                 }
@@ -180,11 +180,11 @@ function FormAddNewMiniPitch() {
           </div>
         </div>
         <div className="row add-time-slot" onClick={addRowTimeSlot}>
-            <span className="glyphicon glyphicon-plus" />
-            <p>Thêm khung giờ</p>
+          <span className="glyphicon glyphicon-plus" />
+          <p>Thêm khung giờ</p>
         </div>
         {
-          timeSlot.map((e, index)=> {
+          timeSlot.map((e, index) => {
             return <div key={index} className="row timeSlot">
               <div className="col">
                 <label for="startDOW">Từ ngày</label>
@@ -192,11 +192,11 @@ function FormAddNewMiniPitch() {
                   id="startDOW"
                   className="form-control"
                   name="startDOW"
-                  onChange={(event)=> changeTimeSlot(event, index)}
+                  onChange={(event) => changeTimeSlot(event, index)}
                   value={e.startDOW}
                 >
                   {
-                    dayOfWeek.map((element, index)=> {
+                    dayOfWeek.map((element, index) => {
                       return <option key={index} value={element.value}>
                         {element.dow}
                       </option>
@@ -210,11 +210,11 @@ function FormAddNewMiniPitch() {
                   id="endDOW"
                   className="form-control"
                   name="endDOW"
-                  onChange={(event)=> changeTimeSlot(event, index)}
+                  onChange={(event) => changeTimeSlot(event, index)}
                   value={e.endDOW}
                 >
                   {
-                    dayOfWeek.map((element, index)=> {
+                    dayOfWeek.map((element, index) => {
                       return <option key={index} value={element.value}>
                         {element.dow}
                       </option>
@@ -225,12 +225,12 @@ function FormAddNewMiniPitch() {
               <div className="col">
                 <label for="startHour">Giờ bắt đầu</label>
                 <input
-                    id="startHour"
-                    type="time"
-                    className="form-control"
-                    name="startHour"
-                    onChange={(event)=> changeTimeSlot(event, index)}
-                    value={e.startHour}
+                  id="startHour"
+                  type="time"
+                  className="form-control"
+                  name="startHour"
+                  onChange={(event) => changeTimeSlot(event, index)}
+                  value={e.startHour}
                 />
               </div>
               <div className="col">
@@ -240,7 +240,7 @@ function FormAddNewMiniPitch() {
                   type="time"
                   className="form-control"
                   name="endHour"
-                  onChange={(event)=> changeTimeSlot(event, index)}
+                  onChange={(event) => changeTimeSlot(event, index)}
                   value={e.endHour}
                 />
               </div>
@@ -251,11 +251,11 @@ function FormAddNewMiniPitch() {
                   type="number"
                   className="form-control"
                   name="cost"
-                  onChange={(event)=> changeTimeSlot(event, index)}
+                  onChange={(event) => changeTimeSlot(event, index)}
                   value={e.cost}
                 />
               </div>
-              <span onClick={()=> removeTimeSlot(index)} className="glyphicon glyphicon-remove btn-remove-time-slot" />
+              <span onClick={() => removeTimeSlot(index)} className="glyphicon glyphicon-remove btn-remove-time-slot" />
             </div>
           })
         }

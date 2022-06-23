@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: auto;
   background: linear-gradient(
       rgba(255, 255, 255, -0.4),
       rgba(255, 255, 255, -0.4)
@@ -17,6 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom:20px;
 `;
 
 const Title = styled.h1`
@@ -70,17 +71,17 @@ const PitchList = () => {
     getPitchList();
   }, []);
 
-  const createNewPitch = ()=> {
+  const createNewPitch = () => {
     navigate("/pitchowner/createNewPitch");
   }
 
-  const addMiniPitch = (pitchId)=> {
+  const addMiniPitch = (pitchId) => {
     navigate(`/pitchowner/addMiniPitch/${pitchId}`);
   }
   return (
     <div>
       <Container>
-        <Title style={{ marginBottom: "10px", marginTop: "65px" }}>XỬ LÝ ĐẶT SÂN</Title>
+        <Title style={{ marginBottom: "10px", marginTop: "65px" }}>DANH SÁCH SÂN BÓNG</Title>
         <Wrapper>
           <Menu>
             <div>
@@ -110,15 +111,15 @@ const PitchList = () => {
                       {`${pitch.address.number} ${pitch.address.street}, ${pitch.address.commune}, ${pitch.address.district}, ${pitch.address.city}`}
                     </td>
                     <td>
-                      <img style={{width : 120, height: 120}} src={pitch.coverAvatarLink}></img>
+                      <img style={{ width: 120, height: 120 }} src={pitch.coverAvatarLink}></img>
                     </td>
                     <td>
                       <Action>
-                        <button style={{marginBottom :5}} className="btn btn-success" onClick={()=> addMiniPitch(pitch.pitchId)}>Thêm sân thành phần</button>
-                        <button style={{marginBottom :5}} className="btn btn-success">
+                        <button style={{ marginBottom: 5 }} className="btn btn-success" onClick={() => addMiniPitch(pitch.pitchId)}>Thêm sân thành phần</button>
+                        <button style={{ marginBottom: 5 }} className="btn btn-success">
                           Sửa thông tin
                         </button>
-                        <button style={{marginBottom :5}} className="btn btn-danger">Xóa</button>
+                        <button style={{ marginBottom: 5 }} className="btn btn-danger">Xóa</button>
                       </Action>
                     </td>
                   </tr>

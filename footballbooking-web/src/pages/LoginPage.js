@@ -34,7 +34,7 @@ function LoginPage(props) {
                     } else if (response.data.role === "ROLE_PITCHOWNER") {
                         navigate('/pitchowner/booking');
                     } else if (response.data.role === "ROLE_ADMIN") {
-                        navigate('/');
+                        navigate('/list-user');
                     } else {
                         console.log("ERROR")
                         setCheck(false)
@@ -46,9 +46,9 @@ function LoginPage(props) {
 
     }
     return (
-      <div>
-        <Login check={check} onClickLogin={handleClickLogin} />
-      </div>
+        <div>
+            <Login check={check} onClickLogin={handleClickLogin} />
+        </div>
     );
 }
 

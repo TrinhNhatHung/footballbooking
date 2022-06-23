@@ -2,13 +2,13 @@
     margin-top: 100px;
 }
 
-.row {
+.row-form {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.col {
+.col-form {
     width: 90%;
     margin: 0px 50px;
     text-align: left;

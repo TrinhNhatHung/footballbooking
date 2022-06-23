@@ -8,7 +8,7 @@ import '../PitchReq/pitchrequest.css';
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: auto;
   background: linear-gradient(
       rgba(255, 255, 255, -0.4),
       rgba(255, 255, 255, -0.4)
@@ -18,6 +18,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom:20px;
 `;
 
 const Title = styled.h1`
@@ -55,7 +56,7 @@ const PitchRequest = () => {
 
     axiosClientPost(config)
       .then((response) => {
-        setListRequest(response.data);
+        setListRequest(response.data.reverse());
       })
       .catch(() => {
         navigate("/login");
