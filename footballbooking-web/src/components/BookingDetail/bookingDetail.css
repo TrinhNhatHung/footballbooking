@@ -173,7 +173,12 @@ p {
 /*  */
 
 .title-booking {
-    text-align: center;
+    text-align: start;
+}
+
+.item-booking {
+    text-align: start;
+    line-height: 44px !important;
 }
 
 .warning {

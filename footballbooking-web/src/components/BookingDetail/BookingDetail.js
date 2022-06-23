@@ -28,8 +28,10 @@ function BookingDetail(props) {
     useEffect(() => {
         const bookingInfor = async () => {
             const response = await pitchApi.bookingInfor()
-            setListBooking(response.data.sort((a, b) => a.time - b.time))
-            console.log(response.data.sort((a, b) => a.time - b.time))
+            const bookingAccept = response.data.filter(e => e.status !== 'Chờ xác nhận').map(e => e.bookingId)
+            console.log(bookingAccept)
+            const newBooking = response.data.filter(e => (bookingAccept.includes(e.bookingId) && e.status !== 'Chờ xác nhận') || !bookingAccept.includes(e.bookingId))
+            setListBooking(newBooking.reverse())
         }
         bookingInfor();
         console.log("bookingInfor")
@@ -54,11 +56,11 @@ function BookingDetail(props) {
                     <tbody>
                         {listBooking?.map((e, index) => (
                             <tr key={index}>
-                                <td>{e.pitchName}</td>
-                                <td>{e.time}</td>
-                                <td>{e.pitchTypeName}</td>
-                                <td>{e.cost}VNĐ</td>
-                                <td><span className={(e.status === 'Chờ xác nhận') ? 'warning' : (e.status === 'Đã hủy') ? 'cancel' : 'accept'}>{e.status}</span></td>
+                                <td className='item-booking'>{e.pitchName}</td>
+                                <td className='item-booking'>{e.time}</td>
+                                <td className='item-booking'>{e.pitchTypeName}</td>
+                                <td className='item-booking'>{e.cost}VNĐ</td>
+                                <td className='item-booking'><span className={(e.status === 'Chờ xác nhận') ? 'warning' : (e.status === 'Đã hủy') ? 'cancel' : 'accept'}>{e.status}</span></td>
                                 <td>
                                     <button className={(e.status === 'Chờ xác nhận') ? 'btn btn-large btn-block btn-danger' : 'btn btn-large btn-block btn-danger disabled'} data-toggle="modal" data-target={`#exampleModalDetail${e.bookingId}`} >
                                         <span>Hủy</span>

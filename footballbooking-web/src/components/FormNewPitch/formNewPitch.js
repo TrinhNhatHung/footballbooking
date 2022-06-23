@@ -40,15 +40,15 @@ const FormNewPitch = () => {
       });
   };
 
-  const navigateToMyPitchPage = ()=> {
+  const navigateToMyPitchPage = () => {
     navigate("/pitchowner/pitchList");
   }
 
   return (
     <div className="formNewPitch container">
       <form>
-        <div className="row">
-          <div className="col">
+        <div className="row-form">
+          <div className="col-form">
             <div className="form-group">
               <label for="name">Tên sân</label>
               <input
@@ -62,7 +62,7 @@ const FormNewPitch = () => {
               />
             </div>
           </div>
-          <div className="col">
+          <div className="col-form">
             <div className="form-group">
               <label for="description">Mô tả</label>
               <input
@@ -77,8 +77,8 @@ const FormNewPitch = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col">
+        <div className="row-form">
+          <div className="col-form">
             <div className="form-group">
               <label for="city">Thành phố</label>
               <input
@@ -92,7 +92,7 @@ const FormNewPitch = () => {
               />
             </div>
           </div>
-          <div className="col">
+          <div className="col-form">
             <div className="form-group">
               <label for="district">Quận</label>
               <input
@@ -107,8 +107,8 @@ const FormNewPitch = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col">
+        <div className="row-form">
+          <div className="col-form">
             <div className="form-group">
               <label for="commune">Phường</label>
               <input
@@ -122,7 +122,7 @@ const FormNewPitch = () => {
               />
             </div>
           </div>
-          <div className="col">
+          <div className="col-form">
             <div className="form-group">
               <label for="street">Đường</label>
               <input

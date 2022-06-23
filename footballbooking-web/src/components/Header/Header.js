@@ -86,8 +86,8 @@ function Header(props) {
                                                             <li><Link to="./add-user">Thêm người dùng</Link></li>
                                                         </ul>
                                                     </li>
-                                                    : <li> <span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Sân đặt</span>
-                                                    </li>
+                                                    : (localStorage.getItem('role') === 'ROLE_CUSTOMER') ? <li> <span onClick={handleClickBookingOrder}><span className="glyphicon glyphicon-book" /> Sân đặt</span>
+                                                    </li> : ""
                                             }
 
                                             <li><Link to="/profile"><span className="glyphicon glyphicon-user" /> Profile</Link></li>
