@@ -51,7 +51,9 @@ public class PitchService {
 	}
 	
 	public List<Pitch> getByUserId (Integer userId){
-		return pitchDao.getByUserId(userId);
+		List<Pitch> pitchs = pitchDao.getByUserId(userId);
+		pitchs = pitchs.stream().filter(p -> p.isStatus()).collect(Collectors.toList());
+		return pitchs;
 	}
 
 	@Transactional
@@ -77,4 +79,8 @@ public class PitchService {
 		pitchDetailDao.insertList(pitchDetailList);
 	}
 	
+	@Transactional
+	public void disableStatus (Integer pitchId) {
+		pitchDao.disableStatus(pitchId);
+	}
 }

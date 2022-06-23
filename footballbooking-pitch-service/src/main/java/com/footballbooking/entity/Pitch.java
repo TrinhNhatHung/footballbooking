@@ -34,6 +34,9 @@ public class Pitch implements Serializable {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "status")
+	private boolean status;
+	
 	@Column(name = "cover_avatar")
 	private String coverAvatar;
 
@@ -129,6 +132,14 @@ public class Pitch implements Serializable {
 
 	public void setCoverAvatarLink(String coverAvatarLink) {
 		this.coverAvatarLink = coverAvatarLink;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 }

@@ -21,4 +21,5 @@ public class PitchTypeService {
 	public PitchType getById (Integer pitchTypeId) {
 		return pitchTypeDao.getById(pitchTypeId);
 	}
+	
 }

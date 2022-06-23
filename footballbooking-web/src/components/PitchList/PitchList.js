@@ -78,6 +78,26 @@ const PitchList = () => {
   const addMiniPitch = (pitchId) => {
     navigate(`/pitchowner/addMiniPitch/${pitchId}`);
   }
+
+  const deletePitch = (pitchId)=> {
+    var data = new FormData();
+    var config = {
+      url: `/pitchservice/deletePitch/${pitchId}`,
+      method: "POST",
+      data,
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        ...data.getHeaders,
+      },
+    };
+
+    axiosClientPost(config)
+      .then(() => {
+        getPitchList();
+      })
+      .catch(() => {
+      });
+  }
   return (
     <div>
       <Container>
@@ -115,11 +135,8 @@ const PitchList = () => {
                     </td>
                     <td>
                       <Action>
-                        <button style={{ marginBottom: 5 }} className="btn btn-success" onClick={() => addMiniPitch(pitch.pitchId)}>Thêm sân thành phần</button>
-                        <button style={{ marginBottom: 5 }} className="btn btn-success">
-                          Sửa thông tin
-                        </button>
-                        <button style={{ marginBottom: 5 }} className="btn btn-danger">Xóa</button>
+                        <button style={{marginBottom :5}} className="btn btn-success" onClick={()=> addMiniPitch(pitch.pitchId)}>Thêm sân thành phần</button>
+                        <button style={{marginBottom :5}} className="btn btn-danger" onClick={()=> deletePitch(pitch.pitchId)}>Xóa</button>
                       </Action>
                     </td>
                   </tr>

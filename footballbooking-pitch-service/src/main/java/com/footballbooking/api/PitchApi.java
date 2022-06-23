@@ -166,4 +166,18 @@ public class PitchApi {
 		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
 	}
 	
+	@PostMapping("/deletePitch/{pitchId}")
+	public ResponseEntity<?> deletePitch (@PathVariable(name = "pitchId") String pitchId){
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Integer pitchIdInt = Integer.parseInt(pitchId);
+			pitchService.disableStatus(pitchIdInt);
+			result = ResponseUtil.createResponse(true, null, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.createResponse(false, null, "");
+		}
+		return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
+	}
+	
 }

@@ -82,4 +82,11 @@ public class PitchDao extends EntityDao<Pitch> {
 		addressDao.insert(pitch.getAddress());
 		super.insert(pitch);
 	}
+	
+	public void disableStatus (Integer pitchId) {
+		String sql = "UPDATE pitch SET status = 0 WHERE pitch_id = :pitchId";
+		NativeQuery<Pitch> query = getCurrentSession().createNativeQuery(sql, Pitch.class);
+		query.setParameter("pitchId", pitchId);
+		query.executeUpdate();
+	}
 }
