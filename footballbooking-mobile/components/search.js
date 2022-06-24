@@ -1,12 +1,10 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, FlatList } from 'react-native'
-import React, { useState, useEffect } from 'react';
-import { Entypo, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import React, { useState } from 'react';
+import { Dimensions, FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import Constants from 'expo-constants'
 
 export default function search(props) {
-
-    // const [text, onChangeText] = React.useState('');
     const [modalVisible, setmodalVisible] = useState(false)
     const [pitchTypeChecked, setpitchTypeChecked] = React.useState([
         { id: 1, pitchType: 'Sân 5', isChecked: false },
@@ -34,16 +32,6 @@ export default function search(props) {
         });
         return temp;
     };
-
-    // const addressArray = props.pitchs.data.map(item => {
-    //     return item.address.street;
-    // })
-    // const uniqueAddressArray = addressArray.filter((item, index) => {   
-    //    return addressArray.indexOf(item) === index
-    // });
-
-    // const pitchTypeArray = ['Sân 5', 'Sân 7', 'Sân 11']
-    // console.log(uniqueAddressArray)
 
     return (
         <View>
@@ -86,14 +74,6 @@ export default function search(props) {
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                // onBackButtonPress ={() => {
-                //   setHourStart({
-                //     // hourStart: hourStart.hourStart,
-                //     // miniPitchId: hourStart.miniPitchId,
-                //     modalVisible: !hourStart.modalVisible
-                //   })
-                //   console.log('Back')
-                // // }}
                 onRequestClose={() => {
                     setmodalVisible(false)
                 }
@@ -105,18 +85,9 @@ export default function search(props) {
                             Chọn khu vực
                         </Text>
                         <FlatList
-                            // contentContainerStyle={styles.modalView}
-                            // data={searchPitchs.searching ? searchPitchs.data : pitchs.data}
                             data={zoneChecked}
                             renderItem={({ item }) =>
-                                <View style={styles.checkboxItem}>
-                                    {/* <Text>Hello</Text> */}
-                                    {/* <Checkbox
-                                status={checked ? 'checked' : 'unchecked'}
-                                onPress={() => {
-                                    setChecked(!checked);
-                                }}
-                            /> */}
+                                <View>
                                     <Checkbox.Item
                                         label={item.zone}
                                         status={item.isChecked ? 'checked' : 'unchecked'}
@@ -125,6 +96,7 @@ export default function search(props) {
                                         }}
                                         uncheckedColor='green'
                                         color='green'
+                                        style={styles.checkboxItem}
                                     />
 
                                 </View>
@@ -135,34 +107,18 @@ export default function search(props) {
                             Chọn loại sân
                         </Text>
                         <FlatList
-                            // contentContainerStyle={styles.modalView}
-                            // data={searchPitchs.searching ? searchPitchs.data : pitchs.data}
                             data={pitchTypeChecked}
                             renderItem={({ item }) =>
-                                <View style={styles.checkboxItem}>
-                                    {/* <Text>Hello</Text> */}
-                                    {/* <Checkbox
-                                status={checked ? 'checked' : 'unchecked'}
-                                onPress={() => {
-                                    setChecked(!checked);
-                                }}
-                            /> */}
+                                <View>
                                     <Checkbox.Item
                                         label={item.pitchType}
-                                        // style={{
-                                        //     flexDirection: 'row',
-                                        //     // flex: 1,
-                                        //     paddingVertical: 5,
-                                        //     justifyContent: 'space-between',
-                                        // }}
                                         status={item.isChecked ? 'checked' : 'unchecked'}
                                         onPress={() => {
                                             setpitchTypeChecked(handleChange(pitchTypeChecked, item.id))
                                         }}
                                         uncheckedColor='green'
                                         color='green'
-                                    // position='leading'
-
+                                        style={styles.checkboxItem}
                                     />
 
                                 </View>
@@ -193,18 +149,17 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         height: 40,
         backgroundColor: 'white',
-        //width: '100%',
         marginLeft: 30,
         marginRight: 60,
         paddingHorizontal: 20,
         borderRadius: 4,
     },
+
     centeredView: {
         flex: 1,
         justifyContent: "center",
-        // alignItems: "flex-start",
-        // marginTop: 0
     },
+
     modalView: {
         margin: 20,
         alignItems: 'flex-start',
@@ -213,8 +168,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         paddingTop: 10,
         minHeight: '80%',
-        minWidth: '80%',
-        // alignItems: "center",
+        minWidth: Dimensions.get('window').width*90/100,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -224,24 +178,21 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
     },
+
     filterTittle: {
         marginLeft: 5,
         fontWeight:'bold',
         fontSize: 20,
         color: '#C6C6C6'
     },
+
     checkboxItem: {
-        // alignItems: 'center',
         justifyContent: 'center',
-        // borderWidth: 1,
-        width: 250,
-        height: 30,
+        width: Dimensions.get('window').width*90/100,
+        height: 35,
         borderBottomWidth: 1,
-        // paddingRight: 10,
-        // marginLeft: 16,
-        // marginBottom: 10,
-        // backgroundColor: '#368340',
     },
+
     button: {
         backgroundColor: '#28A745',
         alignItems: 'center',
@@ -251,6 +202,5 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         flex: 1,
         borderRadius: 4,
-
     },
 })

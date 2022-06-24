@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    TextInput,
-    Platform,
-    StyleSheet,
-    StatusBar,
-    Alert
+    Alert, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-// import LinearGradient from 'react-native-linear-gradient';
-import { LinearGradient } from 'expo-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
-
+import { LinearGradient } from 'expo-linear-gradient';
+import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from 'react-native-paper';
 
 import { AuthContext } from '../components/context';
-
-import { useStateWithCallbackLazy } from 'use-state-with-callback';
-// import Users from '../model/users';
 import { apiURL } from '../api/config';
 
 const SignIn = ({ navigation }) => {
-    // const apiURL = 'http:/192.168.1.5:8080/';
     const [foundUser, setfoundUser] = useState({
         "isAuthen": false,
     });
@@ -43,7 +29,7 @@ const SignIn = ({ navigation }) => {
     const { signIn } = React.useContext(AuthContext);
 
     const textInputChange = (val) => {
-        if (val.trim().length >= 4) {
+        if (val.trim().length == 10 || val.trim().length == 11) {
             setData({
                 ...data,
                 username: val,
@@ -101,21 +87,16 @@ const SignIn = ({ navigation }) => {
         axios.post(`${apiURL}userservice/checkLogin`, {
             phone: String(userName),
             password: String(password)
-            // phone: userName,
-            // password: password
         }, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
             .then(response => {
-                // console.log(response.data.data)
                 return response
             })
             .then((response => {
-                // userAuthen = response.data.data.isAuthen
                 setfoundUser(response.data.data)
-                // console.log(response.data.data)
                 if (!response.data.success) {
                     Alert.alert('Invalid User!', 'Username or password is incorrect.', [
                         { text: 'Okay' }
@@ -125,11 +106,6 @@ const SignIn = ({ navigation }) => {
                 signIn(response.data.data, String(password))
             }))
             .catch(error => console.log(error));
-        // console.log(userName+" + "+password)
-        // setTimeout(async () => {
-
-        //   }, 2000);
-        // signIn(foundUser);
     }
 
     return (
@@ -161,7 +137,6 @@ const SignIn = ({ navigation }) => {
                         }]}
                         autoCapitalize="none"
                         onChangeText={(val) => textInputChange(val)}
-                    // onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
                     />
                     {data.check_textInputChange ?
                         <Animatable.View
@@ -175,12 +150,6 @@ const SignIn = ({ navigation }) => {
                         </Animatable.View>
                         : null}
                 </View>
-                {/* { data.isValidUser ? null : 
-            <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
-            </Animatable.View>
-            } */}
-
 
                 <Text style={[styles.text_footer, {
                     color: colors.text,
@@ -195,41 +164,15 @@ const SignIn = ({ navigation }) => {
                     <TextInput
                         placeholder="Your Password"
                         placeholderTextColor="#666666"
-                        // secureTextEntry={data.secureTextEntry ? true : false}
+                        secureTextEntry={data.secureTextEntry ? true : false}
                         style={[styles.textInput, {
                             color: colors.text
                         }]}
                         autoCapitalize="none"
                         onChangeText={(val) => handlePasswordChange(val)}
                     />
-                    {/* <TouchableOpacity
-                        onPress={updateSecureTextEntry}
-                    >
-                        {data.secureTextEntry ?
-                            <Feather
-                                name="eye-off"
-                                color="grey"
-                                size={20}
-                            />
-                            :
-                            <Feather
-                                name="eye"
-                                color="grey"
-                                size={20}
-                            />
-                        }
-                    </TouchableOpacity> */}
                 </View>
-                {/* {data.isValidPassword ? null :
-                    <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
-                    </Animatable.View>
-                } */}
 
-
-                <TouchableOpacity>
-                    <Text style={{ color: '#28A745', marginTop: 15 }}>Forgot password?</Text>
-                </TouchableOpacity>
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
@@ -270,12 +213,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#28A745'
     },
+
     header: {
         flex: 1,
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
         paddingBottom: 50
     },
+
     footer: {
         flex: 3,
         backgroundColor: '#fff',
@@ -284,15 +229,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 30
     },
+
     text_header: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 30
     },
+
     text_footer: {
         color: '#05375a',
         fontSize: 18
     },
+
     action: {
         flexDirection: 'row',
         marginTop: 10,
@@ -300,6 +248,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f2f2f2',
         paddingBottom: 5
     },
+
     actionError: {
         flexDirection: 'row',
         marginTop: 10,
@@ -307,20 +256,24 @@ const styles = StyleSheet.create({
         borderBottomColor: '#FF0000',
         paddingBottom: 5
     },
+
     textInput: {
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
     },
+
     errorMsg: {
         color: '#FF0000',
         fontSize: 14,
     },
+    
     button: {
         alignItems: 'center',
         marginTop: 50
     },
+    
     signIn: {
         width: '100%',
         height: 50,
@@ -328,6 +281,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10
     },
+    
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'

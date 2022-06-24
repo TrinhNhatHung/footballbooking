@@ -6,16 +6,12 @@ import axios from 'axios';
 
 import PitchItem from '../components/pitchItem';
 import Search from '../components/search';
-import pitchItem from '../components/pitchItem';
 import { apiURL } from '../api/config';
 
 
 
 
 const Home = ({ navigation }) => {
-  // const apiURL = 'http://localhost:8080/pitchservice/pitchs';
-  // const apiURL = 'http://192.168.1.5:8080/pitchservice/pitchs';
-
   const [pitchs, setpitchs] = useState({
     loading: true,
     data: [],
@@ -27,22 +23,22 @@ const Home = ({ navigation }) => {
   });
 
   const [searchText, setSearchText] = useState('')
-  // const [pitchTypeChecked, setpitchTypeChecked] = React.useState([
-  //   { id: 1, pitchType: 'Sân 5', isChecked: false },
-  //   { id: 2, pitchType: 'Sân 7', isChecked: false },
-  //   { id: 3, pitchType: 'Sân 11', isChecked: false },
-  // ]);
+  const [pitchTypeChecked, setpitchTypeChecked] = React.useState([
+    { id: 1, pitchType: 'Sân 5', isChecked: false },
+    { id: 2, pitchType: 'Sân 7', isChecked: false },
+    { id: 3, pitchType: 'Sân 11', isChecked: false },
+  ]);
 
-  // const [zoneChecked, setZoneChecked] = React.useState([
-  //   { id: 1, zone: 'Hải Châu', isChecked: false },
-  //   { id: 2, zone: 'Cẩm Lệ', isChecked: false },
-  //   { id: 3, zone: 'Thanh Khê', isChecked: false },
-  //   { id: 4, zone: 'Liên Chiểu', isChecked: false },
-  //   { id: 5, zone: 'Ngũ Hành Sơn', isChecked: false },
-  //   { id: 6, zone: 'Sơn Trà', isChecked: false },
-  //   { id: 7, zone: 'Hòa Vang', isChecked: false },
-  //   { id: 8, zone: 'Hoàng Sa', isChecked: false },
-  // ]);
+  const [zoneChecked, setZoneChecked] = React.useState([
+    { id: 1, zone: 'Hải Châu', isChecked: false },
+    { id: 2, zone: 'Cẩm Lệ', isChecked: false },
+    { id: 3, zone: 'Thanh Khê', isChecked: false },
+    { id: 4, zone: 'Liên Chiểu', isChecked: false },
+    { id: 5, zone: 'Ngũ Hành Sơn', isChecked: false },
+    { id: 6, zone: 'Sơn Trà', isChecked: false },
+    { id: 7, zone: 'Hòa Vang', isChecked: false },
+    { id: 8, zone: 'Hoàng Sa', isChecked: false },
+  ]);
 
   const [isLoading, setisLoading] = useState(true);
 
@@ -61,13 +57,11 @@ const Home = ({ navigation }) => {
         // data: [],
       })
       setSearchPitchs({
-        // data: newData,
         searching: false
       });
       const res = await axios.get(`${apiURL}pitchservice/pitchs`,
         {
           headers: {
-            // 'Authorization': token,
             'Content-Type': 'multipart/form-data'
           }
         });
@@ -75,39 +69,10 @@ const Home = ({ navigation }) => {
         loading: false,
         data: res.data.data,
       })
-      // console.log(res.data.data)
-      // setIsLoadingFreeTime({ isLoadingFreeTime: false })
-      // arrayA = res.data.data
-      // arrayTemp = [0]
-      // arrayA.forEach(function (element) {
-      //   if (element.hasPitch == true) {
-      //     // arrayTemp = arrayTemp.push(element.timeStart)
-      //     // setArrayFreeTime(arrayTemp)
-      //     console.log(element.timeStart)
-      //   }
-      //   // console.log(element.timeStart)
-      // });
-      // console.log(arrayA)
-      // console.log(arrayTemp)
-      // console.log(res.data.data)
     } catch (error) {
       setMyBooking(JSON.stringify(error.message))
     }
   }
-
-  // const searchFilterFunction = (text) => {
-  //   const newData = pitchs.data.filter(item => {
-  //     const itemData = `${item.name.toUpperCase()} ${item.address.number.toUpperCase()} ${item.address.street.toUpperCase()} ${item.address.commune.toUpperCase()} ${item.address.district.toUpperCase()} ${item.address.city.toUpperCase()}`;
-  //    // const textData = text.toUpperCase();
-
-  //     return itemData.indexOf(text.toUpperCase()) > -1;
-  //   });
-  //   setSearchPitchs({ 
-  //     data: newData,
-  //     searching: true
-  //   });
-  //   console.log(newData + "..." +text)
-  // }
 
   const getSearchText = (text) => {
     setSearchText(text)
@@ -142,17 +107,6 @@ const Home = ({ navigation }) => {
     else return (itemData.indexOf(searchText.toUpperCase()) > -1)
   }))
 
-  // getListPitch = () => {
-  //   fetch(apiURL)
-  //     .then((res) => res.json())
-  //     .then((resJson) => {
-  //       setpitchs(resJson.data)
-  //       // console.log(pitchs)
-  //     }).catch((error) => {
-  //       console.log('Error: ', error);
-  //     }).finally(() => setisLoading(false))
-  // }
-
   if (pitchs.loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -174,24 +128,6 @@ const Home = ({ navigation }) => {
         }}>
           <Text style={styles.result}>Tất cả sân</Text>
         </View>
-        {/* <View style={styles.listContainer}>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-            <PitchItem navigation={navigation}></PitchItem>
-          </View> */}
-        {/* {isLoading ? <ActivityIndicator /> : (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            data={pitchs}
-            renderItem={({ item }) => <PitchItem pitch={item} navigation={navigation} />}
-            keyExtractor={(item) => item.pitchId}
-          />
-        )} */}
         <FlatList
           contentContainerStyle={styles.listContainer}
           // data={searchPitchs.searching ? searchPitchs.data : pitchs.data}
@@ -215,18 +151,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     // paddingHorizontal: 16,
     paddingTop: Constants.statusBarHeight,
+    marginBottom: 50,
   },
+
   result: {
     fontSize: 30,
     fontWeight: 'bold'
   },
+
   headerContainer: {
     height: 100,
     backgroundColor: '#368340',
-    // marginBottom: 20,
     justifyContent: 'center',
-    // alignItems: 'center',
   },
+  
   listContainer: {
     paddingHorizontal: 16
   },

@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment'
+import moment from 'moment';
+import { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const datePicker = (props) => {
     const [date, setDate] = useState(moment());
@@ -9,8 +9,6 @@ const datePicker = (props) => {
     const [show, setShow] = useState(false);
     
     const onChange = (event, selectedDate) => {
-        // const currentDate = selectedDate;
-        // setShow(false);
         setShow(false);
         setDate(moment(selectedDate));
         props.parentCallback(moment(selectedDate).format('YYYY/MM/DD'));
@@ -26,13 +24,6 @@ const datePicker = (props) => {
         showMode('date');
     };
 
-    // const showTimepicker = () => {
-    //     showMode('time');
-    // };
-
-
-
-
     return (
         <View>
             <View style={styles.datePicker}>
@@ -41,16 +32,11 @@ const datePicker = (props) => {
 
                 </TouchableOpacity>
             </View>
-            {/* <View>
-          <Button onPress={showTimepicker} title="Show time picker!" />
-        </View> */}
-            {/* <Text>selected: {date.toLocaleString()}</Text> */}
             {show && (
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={new Date(date)}
                     mode="date"
-
                     is24Hour={true}
                     onChange={onChange}
                     minimumDate={Date.now()}

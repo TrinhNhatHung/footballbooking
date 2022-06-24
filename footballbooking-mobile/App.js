@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from "@react-navigation/stack";
-import 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from "@react-navigation/stack";
+import React, { useEffect } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import 'react-native-gesture-handler';
 
-import { AuthContext } from './components/context'
-
-import Tabs from './navigation/tabs'
+import { AuthContext } from './components/context';
 import RootStack from './navigation/rootStack';
-import PitchDetail from './screens/PitchDetail';
+import Tabs from './navigation/tabs';
 import EditProfile from './screens/EditProfile';
+import PitchDetail from './screens/PitchDetail';
 
 const Stack = createStackNavigator();
 
@@ -59,24 +56,15 @@ export default function App() {
 
   const authContext = React.useMemo(() => ({
     signIn: async (foundUser, password) => {
-      // setUserToken('fgkj');
-      // setIsLoading(false);
       const userToken = String(foundUser.token);
-      ////const userName = foundUser.username;
-      // 4/ ~ code mẫu
       try {
-        // await AsyncStorage.setItem('userToken', userToken);
         await AsyncStorage.multiSet([['userToken', userToken], ['userId', String(foundUser.userId)], ['password', password]]);
       } catch (e) {
         console.log(e);
       }
-      // console.log('user token: ', userToken);
-      // dispatch({ type: 'LOGIN', id: userName, token: userToken });
       dispatch({ type: 'LOGIN', token: userToken });
     },
     signOut: async () => {
-      // setUserToken(null);
-      // setIsLoading(false);
       try {
         await AsyncStorage.removeItem('userToken');
       } catch (e) {
@@ -85,14 +73,11 @@ export default function App() {
       dispatch({ type: 'LOGOUT' });
     },
     signUp: () => {
-      // setUserToken('fgkj');
-      // setIsLoading(false);
     }
   }), []);
 
   useEffect(() => {
     setTimeout(async () => {
-      // setIsLoading(false);
       let userToken;
       userToken = null;
       try {
@@ -100,7 +85,7 @@ export default function App() {
       } catch (e) {
         console.log(e);
       }
-      // console.log('user token: ', userToken);
+
       dispatch({ type: 'RETRIEVE_TOKEN', token: userToken });
     }, 1000);
   }, []);
@@ -113,9 +98,6 @@ export default function App() {
     );
   }
   return (
-    // <NavigationContainer>
-    //   <Tabs />
-    // </NavigationContainer>
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         {/* <RootStack/> */}
@@ -129,7 +111,6 @@ export default function App() {
               }
 
             }}
-          //initialRouteName={'Home'}
           >
             <Stack.Screen name="Home" component={Tabs} options={{ headerShown: false }} />
             <Stack.Screen name="PitchDetail" component={PitchDetail} options={({ route }) => ({ title: route.params.name })} />
